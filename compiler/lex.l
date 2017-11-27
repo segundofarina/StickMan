@@ -17,6 +17,10 @@
 "+"							{ return ADD; }
 "-"							{ return SUBSTRACT; }
 
+"int"						{ return INTEGER_TYPE;}
+"double"					{ return DOUBLE_TYPE;}
+"string"					{ return STRING_TYPE;}
+
 [0-9]+						{ return INTEGER; }
 [0-9]+.[0-9]+				{ return DOUBLE; }
 [a-zA-Z]([a-zA-Z0-9_])*		{ return VARIABLE; }
