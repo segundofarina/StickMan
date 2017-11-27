@@ -1,0 +1,5 @@
+int start(){
+	int florci = 0;
+	int segundo = 1;
+	return florci + segundo;
+}
