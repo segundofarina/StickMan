@@ -7,7 +7,6 @@
 %}
 
 %option noyywrap
-
 %%
 
 

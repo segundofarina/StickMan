@@ -1,13 +1,13 @@
 %{
 	#include <stdio.h>
-	#include <stdlib.h>	
+	#include <stdlib.h>
+	extern void yyerror(char *);	
 	extern int yytext();
 	extern int yylex();
-	extern void yyerror(char *);
 
 %}
 
-%union {char * string ; int integer;}
+%union {char * string ; int integer; double double;}
 %token QUOTE
 %token INIT
 %token PRINT
@@ -21,6 +21,7 @@
 %token ADD
 %token SUBSTRACT
 %token <integer> INTEGER
+%token <double> DOUBLE
 %token DOUBLE
 %token <string> VARIABLE
 %token <string> STRING
@@ -55,17 +56,17 @@
 
 %%
 
-Start : Include Body
+Start : Include Body																													
 			| Body											
-Include : HASHTAG INCLUDE LESS_THAN Name GREATER_THAN SEMICOLON
+Include : HASHTAG INCLUDE LESS_THAN VARIABLE GREATER_THAN SEMICOLON
 Body : Function Body
 			| Function
-Function : ReturnType Name OPEN_PARENTHESES Parameters CLOSE_PARENTHESES OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET
+Function : ReturnType VARIABLE OPEN_PARENTHESES Parameters CLOSE_PARENTHESES OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET
+			| ReturnType VARIABLE OPEN_PARENTHESES CLOSE_PARENTHESES OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET
 ReturnType : Type
-Name : VARIABLE
 Parameters : Parameter COLON Parameters
 			| Parameter
-Parameter : Type Name
+Parameter : Type VARIABLE
 Sentences : Sentence Sentences
 			|Sentence
 Sentence : Cicle Sentence
