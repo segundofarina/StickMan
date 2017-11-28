@@ -5,13 +5,14 @@ all:
 	$(MAKE) clean
 
 grammar:
-	yacc -d yacc.y
+	yacc -d grammar.y
 
 lex:
 	lex lex.l
 
 test:
 	$(MAKE) all
-	./stickman < helloworld.stick
+	./stickman > helloworld.stick
+
 clean:
 	rm lex.yy.c y.tab.c y.tab.h  
