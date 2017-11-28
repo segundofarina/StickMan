@@ -1,7 +1,10 @@
 %{
 	#include "grammar.h"
 	#include <stdio.h>
-	void yyerror(char *);	
+	#include <stdlib.h>
+	extern void yyerror(char *);	
+	extern int yytext();
+
 %}
 
 %token SEMICOLON
@@ -22,16 +25,16 @@
 %token DOUBLE_TYPE
 %token STRING_TYPE
 
-%start start
+%start Start
 
 %%
 
-Start : Function										{ printf("Starting..."); }
+Start : Function										{ printf("/*  Starting... */"); }
 Function : Type Name '(' ')' '{' Sentence '}'			{ ; }
 Name : VARIABLE											{ ; }
-Type : INTEGER_TYPE 									{ ; }
-Type : DOUBLE_TYPE										{ ; }
-Type : STRING_TYPE										{ ; }
+Type : INTEGER_TYPE 									{ $$= yytext(); }
+Type : DOUBLE_TYPE										{ $$= yytext(); }
+Type : STRING_TYPE										{ $$= yytext(); }
 Sentence : Assignment ';' Sentence						{ ; }
 Sentence : Declaration ';' Sentence						{ ; }
 Sentence : Expression ';' Sentence						{ ; }
@@ -40,7 +43,7 @@ Sentence : Assignment ';' 								{ ; }
 Sentence : Declaration ';' 								{ ; }
 Sentence : Return ';' 									{ ; }
 Assignment : VARIABLE '=' Expression					{ update( $1 , $3 ) ; } 
-Declaration : Type VARIABLE '=' Expression				{ add( $1 , $2 , $4 ) ; }
+Declaration : Type VARIABLE '=' Expression				{ /*add( $1 , $2 , $4 ) ;*/ }
 Expression : Expression Operator Expression				{ $$ = $1 + $3 ; }
 Expression : Value										{ $$ = $1 ; }
 Expression : VARIABLE									{ $$ = getValue($1) ; }
@@ -48,20 +51,11 @@ Operator : ADD											{ ; }
 Operator : SUBSTRACT									{ ; }
 Operator : OPEN_ANGLE_BRACKET							{ ; }
 Operator : CLOSE_ANGLE_BRACKET							{ ; }
-Value : INTEGER											{ ; }
+Value : INTEGER											{ $$ = atoi(yytext()); }
 Value : DOUBLE											{ ; }
-Value : STRING											{ ; }
-Return : 'return' Expression							{ printf("%d\n", $2 ); return 0; }
+Value : STRING											{ $$= yytext(); }
+Return : "return" Expression							{ printf("%d\n", $2 ); return 0; }
 
-
-
-
-
-
-
-
-start:
-	VARIABLE OPEN_PARENTHESES STRING CLOSE_PARENTHESES OPEN_CURLY_BRACKET STRING SEMICOLON CLOSE_CURLY_BRACKET
 
 
 

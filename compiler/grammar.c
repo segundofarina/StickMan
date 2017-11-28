@@ -48,7 +48,6 @@ int exists(char * name){
 }
 
 
-
 void addInt(char * name, int value){
 	int_var * aux = malloc( sizeof(int_var) );
 	aux->name = name;
