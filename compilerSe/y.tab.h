@@ -40,48 +40,48 @@
       know about them.  */
    enum yytokentype {
      QUOTE = 258,
-     INIT = 259,
-     PRINT = 260,
-     SEMICOLON = 261,
-     OPEN_CURLY_BRACKET = 262,
-     CLOSE_CURLY_BRACKET = 263,
-     HASHTAG = 264,
-     OPEN_PARENTHESES = 265,
-     CLOSE_PARENTHESES = 266,
-     OPEN_ANGLE_BRACKET = 267,
-     CLOSE_ANGLE_BRACKET = 268,
-     ADD = 269,
-     SUBSTRACT = 270,
-     INTEGER = 271,
-     DOUBLE = 272,
-     VARIABLE = 273,
-     STRING = 274,
-     INTEGER_TYPE = 275,
-     DOUBLE_TYPE = 276,
-     STRING_TYPE = 277
+     SEMICOLON = 259,
+     OPEN_CURLY_BRACKET = 260,
+     CLOSE_CURLY_BRACKET = 261,
+     HASHTAG = 262,
+     EQUAL = 263,
+     OPEN_PARENTHESES = 264,
+     CLOSE_PARENTHESES = 265,
+     LESS_THAN = 266,
+     GREATER_THAN = 267,
+     ADD = 268,
+     SUBSTRACT = 269,
+     INTEGER = 270,
+     DOUBLE = 271,
+     VARIABLE = 272,
+     STRING = 273,
+     INTEGER_TYPE = 274,
+     DOUBLE_TYPE = 275,
+     STRING_TYPE = 276,
+     RETURN = 277
    };
 #endif
 /* Tokens.  */
 #define QUOTE 258
-#define INIT 259
-#define PRINT 260
-#define SEMICOLON 261
-#define OPEN_CURLY_BRACKET 262
-#define CLOSE_CURLY_BRACKET 263
-#define HASHTAG 264
-#define OPEN_PARENTHESES 265
-#define CLOSE_PARENTHESES 266
-#define OPEN_ANGLE_BRACKET 267
-#define CLOSE_ANGLE_BRACKET 268
-#define ADD 269
-#define SUBSTRACT 270
-#define INTEGER 271
-#define DOUBLE 272
-#define VARIABLE 273
-#define STRING 274
-#define INTEGER_TYPE 275
-#define DOUBLE_TYPE 276
-#define STRING_TYPE 277
+#define SEMICOLON 259
+#define OPEN_CURLY_BRACKET 260
+#define CLOSE_CURLY_BRACKET 261
+#define HASHTAG 262
+#define EQUAL 263
+#define OPEN_PARENTHESES 264
+#define CLOSE_PARENTHESES 265
+#define LESS_THAN 266
+#define GREATER_THAN 267
+#define ADD 268
+#define SUBSTRACT 269
+#define INTEGER 270
+#define DOUBLE 271
+#define VARIABLE 272
+#define STRING 273
+#define INTEGER_TYPE 274
+#define DOUBLE_TYPE 275
+#define STRING_TYPE 276
+#define RETURN 277
 
 
 

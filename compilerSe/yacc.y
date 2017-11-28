@@ -1,24 +1,23 @@
 %{
 	#include <stdio.h>
-	#include <stdlib.h>	
+	#include <stdlib.h>
+	extern void yyerror(char *);	
 	extern int yytext();
 	extern int yylex();
-	extern void yyerror(char *);
 
 %}
 
 %union {char * string ; int integer;}
 %token QUOTE
-%token INIT
-%token PRINT
 %token SEMICOLON
 %token OPEN_CURLY_BRACKET
 %token CLOSE_CURLY_BRACKET
 %token HASHTAG
+%token EQUAL
 %token OPEN_PARENTHESES
 %token CLOSE_PARENTHESES
-%token OPEN_ANGLE_BRACKET
-%token CLOSE_ANGLE_BRACKET
+%token LESS_THAN
+%token GREATER_THAN
 %token ADD
 %token SUBSTRACT
 %token <integer> INTEGER
@@ -28,14 +27,40 @@
 %token INTEGER_TYPE
 %token DOUBLE_TYPE
 %token STRING_TYPE
+%token RETURN
 %start Start
-
 
 %%
 
-Start : Function													{;}
-Function : INIT Sentence CLOSE_CURLY_BRACKET						{ ; }
-Sentence : PRINT OPEN_PARENTHESES STRING CLOSE_PARENTHESES SEMICOLON	{ printf("%s\n",$3);}
+Start : Function																								{ ; }
+Function : Type Name OPEN_PARENTHESES CLOSE_PARENTHESES OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET		{ ; }
+Name : VARIABLE																									{ ; }
+Type : INTEGER_TYPE 																							{ ; }
+		| DOUBLE_TYPE 																							{ ; }
+		| STRING_TYPE																							{ ; }
+Sentences: Sentences Sentence																					{ ; }
+		| Sentence 																								{ ; }
+Sentence : Expression SEMICOLON  																				{ ; }
+		| Assignment SEMICOLON																					{ ; }
+		| Declaration SEMICOLON																					{ ; }
+		| Return SEMICOLON															 							{ ; }
+Assignment : VARIABLE EQUAL Expression																			{ ; } 
+Declaration : Type VARIABLE EQUAL Expression																	{ ; }
+		| Type VARIABLE																							{ ; }
+Expression : Expression Operator Expression																		{ ; }
+		| Value																									{ ; }
+		| VARIABLE																								{ ; }
+Operator : ADD																									{ ; }
+		| SUBSTRACT																								{ ; }
+		| LESS_THAN																								{ ; }
+		| GREATER_THAN																							{ ; }
+Value : INTEGER																									{ ; }
+		| DOUBLE																								{ ; }
+		| STRING																								{ ; }
+Return : RETURN Expression																						{ ; }
+
+
+
 
 %%
 
