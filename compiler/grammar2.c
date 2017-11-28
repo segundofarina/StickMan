@@ -1,6 +1,7 @@
 Start : Include Body
-Start : Body												
-Include : '#' 'include' '<' string '>' ';'
+Start : Body	
+											
+Include : HASHTAG 'include' '<' string '>' ';'
 Body : Function Body
 Body : Function
 Function : Return Name '(' Parameters ')' '{' Sentence '}'
