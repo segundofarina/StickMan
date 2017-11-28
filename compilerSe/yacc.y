@@ -42,12 +42,12 @@ Type : INTEGER_TYPE 																							{ ; }
 		| STRING_TYPE																							{ ; }
 Sentences: Sentences Sentence																					{ ; }
 		| Sentence 																								{ ; }
-Sentence : Expression SEMICOLON  																				{ ; }
+Sentence : ExpressionLevel1 SEMICOLON  																				{ ; }
 		| Assignment SEMICOLON																					{ ; }
 		| Declaration SEMICOLON																					{ ; }
 		| Return SEMICOLON															 							{ ; }
-Assignment : VARIABLE EQUAL Expression																			{ ; } 
-Declaration : Type VARIABLE EQUAL Expression																	{ ; }
+Assignment : VARIABLE EQUAL ExpressionLevel1																			{ ; } 
+Declaration : Type VARIABLE EQUAL ExpressionLevel1		(a*(b+c))															{ ; }
 		| Type VARIABLE																							{ ; }
 ExpressionLevel1 : ExpressionLevel1 ADD ExpressionLevel2 														{ ; }
 		| ExpressionLevel2																						{ ; }
@@ -57,15 +57,14 @@ ExpressionLevel3 : ExpressionLevel3 MULTIPLY ExpressionLevel4 													{ ; }
 		| ExpressionLevel4																						{ ; }
 ExpressionLevel4 : ExpressionLevel4 DIVIDE ExpressionLevel5 													{ ; }
 		| ExpressionLevel5																						{ ; }
-ExpressionLevel5 : OPEN_PARENTHESES ExpressionLevel5 CLOSE_PARENTHESES 											{ ; }
+ExpressionLevel5 : OPEN_PARENTHESES ExpressionLevel1 CLOSE_PARENTHESES 											{ ; }
 		| ExpressionLevel6																						{ ; }
 ExpressionLevel6 : Value 																						{ ; }
 		| VARIABLE																								{ ; }
 Value : INTEGER																									{ ; }
 		| DOUBLE																								{ ; }
 		| STRING																								{ ; }
-Return : RETURN Expression																						{ ; }
-
+Return : RETURN ExpressionLevel1																						{ ; }
 
 
 

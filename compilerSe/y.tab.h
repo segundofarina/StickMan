@@ -51,14 +51,16 @@
      GREATER_THAN = 267,
      ADD = 268,
      SUBSTRACT = 269,
-     INTEGER = 270,
-     DOUBLE = 271,
-     VARIABLE = 272,
-     STRING = 273,
-     INTEGER_TYPE = 274,
-     DOUBLE_TYPE = 275,
-     STRING_TYPE = 276,
-     RETURN = 277
+     MULTIPLY = 270,
+     DIVIDE = 271,
+     INTEGER = 272,
+     DOUBLE = 273,
+     VARIABLE = 274,
+     STRING = 275,
+     INTEGER_TYPE = 276,
+     DOUBLE_TYPE = 277,
+     STRING_TYPE = 278,
+     RETURN = 279
    };
 #endif
 /* Tokens.  */
@@ -74,14 +76,16 @@
 #define GREATER_THAN 267
 #define ADD 268
 #define SUBSTRACT 269
-#define INTEGER 270
-#define DOUBLE 271
-#define VARIABLE 272
-#define STRING 273
-#define INTEGER_TYPE 274
-#define DOUBLE_TYPE 275
-#define STRING_TYPE 276
-#define RETURN 277
+#define MULTIPLY 270
+#define DIVIDE 271
+#define INTEGER 272
+#define DOUBLE 273
+#define VARIABLE 274
+#define STRING 275
+#define INTEGER_TYPE 276
+#define DOUBLE_TYPE 277
+#define STRING_TYPE 278
+#define RETURN 279
 
 
 
@@ -91,7 +95,7 @@ typedef union YYSTYPE
 #line 10 "yacc.y"
 {char * string ; int integer;}
 /* Line 1529 of yacc.c.  */
-#line 95 "y.tab.h"
+#line 99 "y.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
