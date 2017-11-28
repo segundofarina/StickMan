@@ -7,9 +7,22 @@ typedef struct int_var
 }int_var; 
 
 
+typedef struct double_var 
+{
+	char * name;
+	double value;
+} double_var;
 
-void add(char * name, int value);
+typedef struct string_var
+{
+	char * name;
+	char * value;
+}string_var;
 
-int update(char * name, int value);
 
-int getValue(char * name);
+
+void add(char * type, char * name, void * value);
+
+void update(char * name, void * value);
+
+void * getValue(char * name);
