@@ -15,6 +15,9 @@
 %token OPEN_CURLY_BRACKET
 %token CLOSE_CURLY_BRACKET
 %token HASHTAG
+
+%token EQUAL
+
 %token OPEN_PARENTHESES
 %token CLOSE_PARENTHESES
 %token OPEN_ANGLE_BRACKET
@@ -28,6 +31,7 @@
 %token INTEGER_TYPE
 %token DOUBLE_TYPE
 %token STRING_TYPE
+
 
 %token INCLUDE
 %token RETURN
@@ -46,11 +50,15 @@
 %token EQUAL_LESS
 %token LESS
 
+
+%token RETURN
+
 %start Start
 
 
 %%
 
+<<<<<<< HEAD
 Start : Include Body
 Start : Body	
 											
@@ -101,10 +109,3 @@ Operator : EGUAL_GREATER
 Operator : LESS
 Operator : EQUAL_LESS
 
-
-
-%%
-
-void yyerror (char *s) {
-	fprintf(stderr, "%s\n", s);
-}
