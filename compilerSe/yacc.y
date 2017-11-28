@@ -28,7 +28,6 @@
 %token INTEGER_TYPE
 %token DOUBLE_TYPE
 %token STRING_TYPE
-%type <string> Str
 %start Start
 
 
@@ -36,8 +35,7 @@
 
 Start : Function													{;}
 Function : INIT Sentence CLOSE_CURLY_BRACKET						{ ; }
-Sentence : PRINT OPEN_PARENTHESES Str CLOSE_PARENTHESES SEMICOLON	{ printf("%s\n",$3);}
-Str : STRING {$$=$1;}
+Sentence : PRINT OPEN_PARENTHESES STRING CLOSE_PARENTHESES SEMICOLON	{ printf("%s\n",$3);}
 
 %%
 

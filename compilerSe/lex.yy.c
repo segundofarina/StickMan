@@ -862,37 +862,41 @@ YY_RULE_SETUP
 case 19:
 YY_RULE_SETUP
 #line 35 "lex.l"
-{ yylval.string = yytext; return VARIABLE; }
+{ 	yylval.string = malloc(yyleng+1);
+								strcpy(yylval.string,yytext);
+								return VARIABLE; }
 	YY_BREAK
 case 20:
 /* rule 20 can match eol */
 YY_RULE_SETUP
-#line 36 "lex.l"
-{ yylval.string = malloc(yyleng+1);strcpy(yylval.string,yytext); return STRING; }
+#line 38 "lex.l"
+{ 	yylval.string = malloc(yyleng+1);
+								strcpy(yylval.string,yytext);
+								return STRING; }
 	YY_BREAK
 case 21:
 /* rule 21 can match eol */
 YY_RULE_SETUP
-#line 38 "lex.l"
+#line 42 "lex.l"
 ;
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 40 "lex.l"
+#line 44 "lex.l"
 ;
 	YY_BREAK
 case 23:
 /* rule 23 can match eol */
 YY_RULE_SETUP
-#line 41 "lex.l"
+#line 45 "lex.l"
 { yylineno++; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 44 "lex.l"
+#line 48 "lex.l"
 ECHO;
 	YY_BREAK
-#line 896 "lex.yy.c"
+#line 900 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1889,7 +1893,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 44 "lex.l"
+#line 48 "lex.l"
 
 
 
