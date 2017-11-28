@@ -39,49 +39,94 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     SEMICOLON = 258,
-     OPEN_CURLY_BRACKET = 259,
-     CLOSE_CURLY_BRACKET = 260,
-     HASHTAG = 261,
-     OPEN_PARENTHESES = 262,
-     CLOSE_PARENTHESES = 263,
-     OPEN_ANGLE_BRACKET = 264,
-     CLOSE_ANGLE_BRACKET = 265,
-     ADD = 266,
-     SUBSTRACT = 267,
-     INTEGER = 268,
-     DOUBLE = 269,
-     VARIABLE = 270,
-     STRING = 271,
-     INTEGER_TYPE = 272,
-     DOUBLE_TYPE = 273,
-     STRING_TYPE = 274
+     QUOTE = 258,
+     INIT = 259,
+     PRINT = 260,
+     SEMICOLON = 261,
+     OPEN_CURLY_BRACKET = 262,
+     CLOSE_CURLY_BRACKET = 263,
+     HASHTAG = 264,
+     OPEN_PARENTHESES = 265,
+     CLOSE_PARENTHESES = 266,
+     ADD = 267,
+     SUBSTRACT = 268,
+     INTEGER = 269,
+     DOUBLE = 270,
+     VARIABLE = 271,
+     STRING = 272,
+     INTEGER_TYPE = 273,
+     DOUBLE_TYPE = 274,
+     STRING_TYPE = 275,
+     ACTION_TYPE = 276,
+     INCLUDE = 277,
+     COLON = 278,
+     FOR = 279,
+     WHILE = 280,
+     IF = 281,
+     ELSE = 282,
+     ELSEIF = 283,
+     ON = 284,
+     RUN = 285,
+     EQUAL = 286,
+     NOT_EQUAL = 287,
+     GREATER_THAN = 288,
+     EQUAL_GREATER_THAN = 289,
+     EQUAL_LESS_THAN = 290,
+     LESS_THAN = 291,
+     MULTIPLY = 292,
+     DIVIDE = 293,
+     RETURN = 294
    };
 #endif
 /* Tokens.  */
-#define SEMICOLON 258
-#define OPEN_CURLY_BRACKET 259
-#define CLOSE_CURLY_BRACKET 260
-#define HASHTAG 261
-#define OPEN_PARENTHESES 262
-#define CLOSE_PARENTHESES 263
-#define OPEN_ANGLE_BRACKET 264
-#define CLOSE_ANGLE_BRACKET 265
-#define ADD 266
-#define SUBSTRACT 267
-#define INTEGER 268
-#define DOUBLE 269
-#define VARIABLE 270
-#define STRING 271
-#define INTEGER_TYPE 272
-#define DOUBLE_TYPE 273
-#define STRING_TYPE 274
+#define QUOTE 258
+#define INIT 259
+#define PRINT 260
+#define SEMICOLON 261
+#define OPEN_CURLY_BRACKET 262
+#define CLOSE_CURLY_BRACKET 263
+#define HASHTAG 264
+#define OPEN_PARENTHESES 265
+#define CLOSE_PARENTHESES 266
+#define ADD 267
+#define SUBSTRACT 268
+#define INTEGER 269
+#define DOUBLE 270
+#define VARIABLE 271
+#define STRING 272
+#define INTEGER_TYPE 273
+#define DOUBLE_TYPE 274
+#define STRING_TYPE 275
+#define ACTION_TYPE 276
+#define INCLUDE 277
+#define COLON 278
+#define FOR 279
+#define WHILE 280
+#define IF 281
+#define ELSE 282
+#define ELSEIF 283
+#define ON 284
+#define RUN 285
+#define EQUAL 286
+#define NOT_EQUAL 287
+#define GREATER_THAN 288
+#define EQUAL_GREATER_THAN 289
+#define EQUAL_LESS_THAN 290
+#define LESS_THAN 291
+#define MULTIPLY 292
+#define DIVIDE 293
+#define RETURN 294
 
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+typedef union YYSTYPE
+#line 10 "grammar.y"
+{char * string ; int integer;}
+/* Line 1529 of yacc.c.  */
+#line 129 "y.tab.h"
+	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 # define YYSTYPE_IS_TRIVIAL 1
