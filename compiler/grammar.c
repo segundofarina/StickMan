@@ -56,19 +56,19 @@ int getValue(char * name){
 	return 0;
 }
 
-
+/*
 int main(){
 	add("martincito", 4);
 	add("segundito", 5);
 	add("florci", 4);
-	printf("%d\n", getValue(florci));
-	printf("%d\n", getValue(martincito));
-	printf("%d\n", getValue(segundito));
+	printf("%d\n", getValue("florci"));
+	printf("%d\n", getValue("martincito"));
+	printf("%d\n", getValue("segundito"));
 	update("florci", 10)
-	printf("%d\n", getValue(florci));
+	printf("%d\n", getValue("florci"));
 	return 0;
 }
-
+*/
 /*
 
 void addDouble(char * name, double * value){
