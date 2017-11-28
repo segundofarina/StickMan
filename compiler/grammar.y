@@ -16,8 +16,6 @@
 %token CLOSE_CURLY_BRACKET
 %token HASHTAG
 
-%token EQUAL
-
 %token OPEN_PARENTHESES
 %token CLOSE_PARENTHESES
 %token OPEN_ANGLE_BRACKET
@@ -45,10 +43,12 @@
 %token RUN
 %token EQUAL
 %token NOT_EQUAL
-%token GREATER
-%token EGUAL_GREATER
-%token EQUAL_LESS
-%token LESS
+%token GREATER_THAN
+%token EGUAL_GREATER_THAN
+%token EQUAL_LESS_THAN
+%token LESS_THAN
+%token MULTIPLY
+%token DIVIDE
 
 
 %token RETURN
@@ -58,7 +58,6 @@
 
 %%
 
-<<<<<<< HEAD
 Start : Include Body
 Start : Body	
 											
@@ -67,45 +66,111 @@ Include : HASHTAG INCLUDE OPEN_ANGLE_BRACKET Name CLOSE_ANGLE_BRACKET SEMICOLON
 Body : Function Body
 Body : Function
 
-Function : ReturnType Name OPEN_PARENTHESES Parameters CLOSE_PARENTHESES OPEN_CURLY_BRACKET Sentence Return CLOSE_CURLY_BRACKET
+Function : ReturnType Name OPEN_PARENTHESES Parameters CLOSE_PARENTHESES OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET
 
 ReturnType : Type
 
 Name : VARIABLE
 
 Parameters : Parameter COLON Parameters
-Parameters : Parameter
+			| Parameter
+
 Parameter : Type Name
 
-Sentence : Cicle Sentence COLON
-Sentence : Assignment Sentence
-Sentence : Declaration Sentence
-Sentence : Cicle 
-Sentence : Assignment
-Sentence : Declaration
-Sentence : Run
-Sentence : Return
+Sentences : Sentence Sentences
+			|Sentence
 
-Cicle : FOR OPEN_PARENTHESES Assignment SEMICOLON Condition SEMICOLON Assignment CLOSE_PARENTHESES OPEN_CURLY_BRACKET Sentence CLOSE_CURLY_BRACKET
-Cicle : WHILE OPEN_PARENTHESES Condition CLOSE_PARENTHESES OPEN_CURLY_BRACKET Sentence CLOSE_CURLY_BRACKET
+Sentence : Cicle Sentence
+			| Assignment Sentence
+			| Declaration Sentence
+			| Cicle 
+			| Assignment
+			| Declaration
+			| Run
+			| Return
+
+Cicle : FOR OPEN_PARENTHESES Assignment SEMICOLON Condition SEMICOLON Assignment CLOSE_PARENTHESES OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET
+Cicle : WHILE OPEN_PARENTHESES Condition CLOSE_PARENTHESES OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET
+
+Assignment : VARIABLE EQUAL Expression
+
+Declaration : Type VARIABLE EQUAL Expression																	
+		| Type VARIABLE		
+
+ExpressionLevel1 : ExpressionLevel1 ADD ExpressionLevel2 
+					| ExpressionLevel2
+ExpressionLevel2 : ExpressionLevel2 SUBSTRACT ExpressionLevel3 
+					| ExpressionLevel3
+ExpressionLevel3 : ExpressionLevel3 MULTIPLY ExpressionLevel4 
+					| ExpressionLevel4
+ExpressionLevel4 : ExpressionLevel4 DIVIDE ExpressionLevel5 
+					| ExpressionLevel5
+ExpressionLevel5 : OPEN_PARENTHESES ExpressionLevel5 CLOSE_PARENTHESES 
+					| ExpressionLevel6
+ExpressionLevel6 : Value 
+					| VARIABLE
+
+Value : INTEGER																									
+		| DOUBLE																								
+		| STRING	
+
+Return : RETURN Expression			
 
 Type : INTEGER_TYPE
 Type : DOUBLE_TYPE
 Type : ACTION_TYPE
 Type : STRING_TYPE
-Return : RETURN Name SEMICOLON
-Return : RETURN Value SEMICOLON
+
 Run : RUN Variable ON Value SEMICOLON
-Variable : Name
-Condition : Condition Operator Condition
-Condition : Variable Operator Variable
-Condition : Var Operator Variable
-Condition : Variable Operator Var
-Condition : Var Operator Var
-Operator : EQUAL
-Operator : NOT_EQUAL
-Operator : GREATER
-Operator : EGUAL_GREATER
-Operator : LESS
-Operator : EQUAL_LESS
+
+
+ConditionLevel1 : ConditionLevel1 EQUAL ConditionLevel2 
+				| ConditionLevel2
+ConditionLevel2 : ConditionLevel2 NOT_EQUAL ConditionLevel3 
+				| ConditionLevel3
+ConditionLevel3 : ConditionLevel3 GREATER_THAN ConditionLevel4 
+				| ConditionLevel4
+ConditionLevel4 : ConditionLevel4 EQUAL_GREATER_THAN ConditionLevel5 
+				| ConditionLevel5
+ConditionLevel5 : ConditionLevel5 LESS_THAN ConditionLevel6 
+				| ConditionLevel6
+ConditionLevel6 : ConditionLevel6 EQUAL_LESS_THAN ConditionLevel7 
+				| ConditionLevel7
+ConditionLevel7 : Value 
+				|VARIABLE
+
+
+
+
+
+
+
+
+
+
+
+
+
+Expression : Expression Operator Expression																		
+		| Value																									
+		| VARIABLE	
+
+
+
+Operator : ADD																									
+		| SUBSTRACT																								
+		| MULTIPLY
+		| DIVIDE
+
+
+Condition : Condition ConditionOperator Condition
+| Value
+| VARIABLE
+
+ConditionOperator : EQUAL
+| NOT_EQUAL
+| GREATER_THAN
+| EGUAL_GREATER_THAN
+| LESS_THAN
+| EQUAL_LESS_THAN
 
