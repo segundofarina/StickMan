@@ -40,23 +40,3 @@ Operator : 'gteq'
 Operator : 'ls'
 Operator : 'lseq'
 
-
-
-typedef struct var_int {
-		char * name;
-		int value;
-	} var_int;
-
-	typedef struct var_double {
-		char * name;
-		double value;
-	} var_double;
-
-	typedef struct var_string {
-		char * name;
-		char * value;
-	} var_double;
-
-	int var_int[50];
-	double var_double[50];
-	char var_string[50];
