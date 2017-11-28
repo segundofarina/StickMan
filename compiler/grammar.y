@@ -7,7 +7,7 @@
 
 %}
 
-%union {char * string ; int integer; double double;}
+%union {char * string ; int integer;}
 %token QUOTE
 %token INIT
 %token PRINT
