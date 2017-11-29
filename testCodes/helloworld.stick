@@ -1,3 +1,6 @@
+Movements addedMovements = include yourFile.stLib
+Movements addedMovements = include yourFile.stLib
+
 start {
 	int a = 5 + 2 + b;
 
@@ -13,7 +16,9 @@ start {
 	}
 
 	for(a = 0; a < 2; a = a+1) {
-		int a = 0;
+		a += 0;
+		a++;
+		a--;
 	}
 
 	say("hola");
@@ -24,9 +29,61 @@ start {
 
 	}
 
-	
+	man.direction = left;
+	if(man.direction == left) {
+	}
+
+	man->moveLeft;
+	man->moveLeft + man->jump;
 }
 
 func say(string hola) -> int {
 
+}
+
+
+
+
+start {
+	int repetitions = 0;
+
+	say("hola!");
+
+	while(repetitions < 15) {
+
+		checkEndOfScreen();
+
+		if(isPar()) {
+			moveAndJump();
+		} else {
+			man->move;
+		}
+
+		repetitions++;
+	}
+
+	say("chau!");
+}
+
+func moveAndJump() {
+	man->move + man->jump;
+}
+
+func isPar() -> boolean {
+	if(man.position%2 == 0) {
+		return true;
+	}
+	return false;
+}
+
+func say(string str) {
+	man->yield str;
+}
+
+func checkEndOfScreen() {
+	if(man.position == eosR) {
+		man.direction = left;
+	} else if(man.position == eosL) {
+		man.direction = right;
+	}
 }

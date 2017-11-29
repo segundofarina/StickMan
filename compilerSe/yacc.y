@@ -20,16 +20,17 @@
 %token <string> VARIABLE
 %token <integer> BOOLEAN
 %token <string> STRING
+%token MAN
 %token INTEGER_TYPE
 %token STRING_TYPE
 %token BOOLEAN_TYPE
+%token MOVEMENTS_TYPE
 %token INCLUDE
 %token COLON
 %token FOR
 %token WHILE
 %token IF
 %token ELSE
-%token ELSEIF
 %token EQUAL
 %token NOT_EQUAL
 %token GREATER_THAN
@@ -38,15 +39,17 @@
 %token LESS_THAN
 %token MULTIPLY
 %token DIVIDE
+%token MODULUS
 %token RETURN
 %token START
 %token AND
 %token OR
 %token FUNCTION
 %token ARROW
+%token DOT
 
 %left ADD SUBSTRACT
-%left MULTIPLY DIVIDE
+%left MULTIPLY DIVIDE MODULUS
 
 %left EQUAL NOT_EQUAL
 %left EQUAL_LESS_THAN EQUAL_GREATER_THAN LESS_THAN GREATER_THAN
@@ -58,18 +61,21 @@
 
 %%
 
-Start: Body
+Start: Headers Body
+Headers: /* empty */
+ 		| Headers Header
+Header: MOVEMENTS_TYPE VARIABLE EQUAL INCLUDE VARIABLE DOT VARIABLE
 Body: Functions
 Functions: Functions Function
 		| Function
 Function: StartFn
-		| FUNCTION VARIABLE OPEN_PARENTHESES CLOSE_PARENTHESES RetrunType OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET
-		| FUNCTION VARIABLE OPEN_PARENTHESES Paramenters CLOSE_PARENTHESES RetrunType OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET
+		| FUNCTION VARIABLE OPEN_PARENTHESES CLOSE_PARENTHESES ReturnType OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET
+		| FUNCTION VARIABLE OPEN_PARENTHESES Paramenters CLOSE_PARENTHESES ReturnType OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET
 StartFn: START OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET
 Paramenters: Paramenters COLON Parameter
 			| Parameter
 Parameter: Type VARIABLE
-RetrunType: /* empty */
+ReturnType: /* empty */
 		| ARROW Type
 
 Sentences: /* empty */
@@ -81,22 +87,38 @@ Sentece: Assignment SEMICOLON
 		| While
 		| For
 		| FunctionCall SEMICOLON
-Assignment: VARIABLE EQUAL Expression
+		| ManAction SEMICOLON
+Assignment: VARIABLE AssignmentOp Expression
+		| VARIABLE IncOp
+		| ManAttribute EQUAL Expression
+AssignmentOp: EQUAL
+		| ADD EQUAL
+		| SUBSTRACT EQUAL
+		| MULTIPLY EQUAL
+		| DIVIDE EQUAL
+IncOp: ADD ADD
+		| SUBSTRACT SUBSTRACT
 Declaration: Type VARIABLE EQUAL Expression
 		| Type VARIABLE
 Return: RETURN Expression
+		| RETURN BOOLEAN
 Type: INTEGER_TYPE
 	| STRING_TYPE
 	| BOOLEAN_TYPE
 Expression: Value
 	| VARIABLE
+	| ManAttribute
 	| FunctionCall
  	| Expression ADD Expression
 	| Expression SUBSTRACT Expression
 	| Expression MULTIPLY Expression
 	| Expression DIVIDE Expression
+	| Expression MODULUS Expression
 Value: INTEGER
-If: IF OPEN_PARENTHESES Condition CLOSE_PARENTHESES OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET
+If: IF OPEN_PARENTHESES Condition CLOSE_PARENTHESES OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET ElseBlock
+ElseBlock: /* empty */
+		| ELSE If
+		| ELSE OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET
 While: WHILE OPEN_PARENTHESES Condition CLOSE_PARENTHESES OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET
 For: FOR OPEN_PARENTHESES Assignment SEMICOLON Condition SEMICOLON Assignment CLOSE_PARENTHESES OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET
 Condition: Expression LogicalOp Expression
@@ -118,6 +140,12 @@ FnParameters: FnParameters COLON FnParameter
 FnParameter: Expression
 		| STRING
 
+ManAttribute: MAN DOT VARIABLE
+ManAction: MAN ARROW VARIABLE ManParams ADD MAN ARROW VARIABLE ManParams
+		| MAN ARROW VARIABLE ManParams
+ManParams: /* empty */
+		| STRING
+		| VARIABLE
 
 %%
 

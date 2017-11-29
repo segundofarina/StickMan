@@ -32,8 +32,12 @@
 
 "*"							{ return MULTIPLY;}
 "/"							{ return DIVIDE;}
+"%"							{ return MODULUS; }
 "->"						{ return ARROW; }
+"."							{ return DOT; }
+"man"						{ return MAN; }
 "int"						{ return INTEGER_TYPE; }
+"Movements"					{ return MOVEMENTS_TYPE; }
 "string"					{ return STRING_TYPE; }
 "boolean"					{ return BOOLEAN_TYPE; }
 "return"					{ return RETURN; }
@@ -42,7 +46,6 @@
 "while"						{ return WHILE;}
 "if"						{ return IF;}
 "else"						{ return ELSE;}
-"else if"					{ return ELSEIF;}
 "true"|"false"				{ return BOOLEAN; }
 "func"						{ return FUNCTION; }
 [0-9]+						{ yylval.integer = atoi(yytext) ; return INTEGER; }
