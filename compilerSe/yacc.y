@@ -18,10 +18,10 @@
 %token CLOSE_PARENTHESES
 %token LESS_THAN
 %token GREATER_THAN
-%token ADD
-%token SUBSTRACT
 %token MULTIPLY
 %token DIVIDE
+%token ADD
+%token SUBSTRACT
 %token <integer> INTEGER
 %token DOUBLE
 %token <string> VARIABLE
@@ -42,29 +42,24 @@ Type : INTEGER_TYPE 																							{ ; }
 		| STRING_TYPE																							{ ; }
 Sentences: Sentences Sentence																					{ ; }
 		| Sentence 																								{ ; }
-Sentence : ExpressionLevel1 SEMICOLON  																				{ ; }
+Sentence : Expression SEMICOLON		  																			{ ; }
 		| Assignment SEMICOLON																					{ ; }
 		| Declaration SEMICOLON																					{ ; }
 		| Return SEMICOLON															 							{ ; }
-Assignment : VARIABLE EQUAL ExpressionLevel1																			{ ; } 
-Declaration : Type VARIABLE EQUAL ExpressionLevel1		(a*(b+c))															{ ; }
+Assignment : VARIABLE EQUAL Expression																			{ ; } 
+Declaration : Type VARIABLE EQUAL Expression																	{ ; }
 		| Type VARIABLE																							{ ; }
-ExpressionLevel1 : ExpressionLevel1 ADD ExpressionLevel2 														{ ; }
-		| ExpressionLevel2																						{ ; }
-ExpressionLevel2 : ExpressionLevel2 SUBSTRACT ExpressionLevel3 													{ ; }
-		| ExpressionLevel3																						{ ; }
-ExpressionLevel3 : ExpressionLevel3 MULTIPLY ExpressionLevel4 													{ ; }
-		| ExpressionLevel4																						{ ; }
-ExpressionLevel4 : ExpressionLevel4 DIVIDE ExpressionLevel5 													{ ; }
-		| ExpressionLevel5																						{ ; }
-ExpressionLevel5 : OPEN_PARENTHESES ExpressionLevel1 CLOSE_PARENTHESES 											{ ; }
-		| ExpressionLevel6																						{ ; }
-ExpressionLevel6 : Value 																						{ ; }
-		| VARIABLE																								{ ; }
+Expression : %prec Expression Operator Expression 																{ ; }
+			| Value																								{ ; }
+			| VARIABLE																							{ ; }
+Operator : ADD																									{ ; }
+			| SUBSTRACT																							{ ; }
+			| MULTIPLY																							{ ; }
+			| DIVIDE																							{ ; }
 Value : INTEGER																									{ ; }
 		| DOUBLE																								{ ; }
 		| STRING																								{ ; }
-Return : RETURN ExpressionLevel1																						{ ; }
+Return : RETURN Expression																						{ ; }
 
 
 
