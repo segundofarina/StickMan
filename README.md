@@ -41,7 +41,7 @@ This attributes can be accessed by typing an instance of stickman followed by an
 ...
 stickman man;
 man.direction = left;
-if (man.postion = eofR){
+if (man.position == eosL){
 	man.direction = right;
 }
 ...
@@ -83,7 +83,7 @@ Two actions can be exectued at the same time using the  "+" operator. For exampl
 
 while (true){
 	if (man.position%2 == 0){
-		man.jump + man.move;
+		man->jump + man->walk;
 	}
 }
 ```
@@ -106,7 +106,7 @@ Some example functions can be:
 
 ```
 func jumpAndWalk( stickman man ) {
-	man.jump + man.move;
+	man->jump + man->walk;
 }
 ```
 
