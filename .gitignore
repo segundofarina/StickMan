@@ -3,55 +3,34 @@ y.tab.h
 lex.yy.c
 
 
-# Prerequisites
-*.d
+# Ignore all
+*
 
-# Object files
-*.o
-*.ko
-*.obj
-*.elf
+# Unignore all with extensions
+!*.*
 
-# Linker output
-*.ilk
-*.map
-*.exp
+# Unignore all dirs
+!*/
 
-# Precompiled Headers
-*.gch
-*.pch
+### Above combination will ignore all files without extension ###
 
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
+# Ignore files with extension `.class` & `.sm`
+*.class
+*.sm
 
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
+# Ignore `bin` dir
+bin/
+# or
+*/bin/*
 
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
+# Unignore all `.jar` in `bin` dir
+!*/bin/*.jar
 
-# Debug files
-*.dSYM/
-*.su
-*.idb
-*.pdb
+# Ignore all `library.jar` in `bin` dir
+*/bin/library.jar
 
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
+# Ignore a file with extension
+relative/path/to/dir/filename.extension
+
+# Ignore a file without extension
+relative/path/to/dir/anotherfile
