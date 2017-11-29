@@ -26,6 +26,7 @@
 %token BOOLEAN_TYPE
 %token MOVEMENTS_TYPE
 %token INCLUDE
+%token FILE_NAME
 %token COLON
 %token FOR
 %token WHILE
@@ -61,11 +62,10 @@
 
 %%
 
-Start: Headers Body
+Start: Headers Functions
 Headers: /* empty */
  		| Headers Header
-Header: MOVEMENTS_TYPE VARIABLE EQUAL INCLUDE VARIABLE DOT VARIABLE
-Body: Functions
+Header: INCLUDE FILE_NAME
 Functions: Functions Function
 		| Function
 Function: StartFn
@@ -105,7 +105,7 @@ Return: RETURN Expression
 Type: INTEGER_TYPE
 	| STRING_TYPE
 	| BOOLEAN_TYPE
-Expression: Value
+Expression: INTEGER
 	| VARIABLE
 	| ManAttribute
 	| FunctionCall
@@ -114,7 +114,6 @@ Expression: Value
 	| Expression MULTIPLY Expression
 	| Expression DIVIDE Expression
 	| Expression MODULUS Expression
-Value: INTEGER
 If: IF OPEN_PARENTHESES Condition CLOSE_PARENTHESES OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET ElseBlock
 ElseBlock: /* empty */
 		| ELSE If

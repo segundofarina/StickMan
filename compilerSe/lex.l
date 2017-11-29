@@ -55,6 +55,7 @@
 \"[^\"]*\"					{ 	yylval.string = malloc(yyleng+1);
 								strcpy(yylval.string,yytext);
 								return STRING; }
+[a-zA-Z]([a-zA-Z0-9_])*."stickLib"		{ return FILE_NAME; }
 \/\*([^\*\/])*\*\/			;
 [ \t]						;
 
