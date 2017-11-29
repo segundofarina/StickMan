@@ -1,6 +1,32 @@
-int start(){
-	int a = 4;
-	int b = 3;
+start {
+	int a = 5 + 2 + b;
+
+	a = 2;
+	return a;
+
+	if(true || 1 == 2) {
+		a = 5;
+	}
+
+	while(true) {
+		int a = 0;
+	}
+
+	for(a = 0; a < 2; a = a+1) {
+		int a = 0;
+	}
+
+	say("hola");
+
+	int a = say("hola");
+
+	if(isPar()) {
+
+	}
+
 	
-	return a + b;
+}
+
+func say(string hola) -> int {
+
 }

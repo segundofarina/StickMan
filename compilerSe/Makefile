@@ -5,7 +5,7 @@ all:
 	$(MAKE) clean
 
 grammar:
-	yacc -d yacc.y	
+	yacc -d yacc.y
 
 lex:
 	lex lex.l
@@ -13,8 +13,7 @@ lex:
 test:
 	$(MAKE) all
 
-	./stickman < helloworld.stick
+	./stickman < ../testCodes/helloworld.stick
 
 clean:
-	rm lex.yy.c y.tab.c y.tab.h  
-
+	rm lex.yy.c y.tab.c y.tab.h

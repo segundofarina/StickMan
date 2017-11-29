@@ -9,13 +9,13 @@
 %option noyywrap
 %%
 
+"start"						{ return START; }
 
-"\""						{ return QUOTE; }
+
 ";"							{ return SEMICOLON; }
 ","							{ return COLON;}
 "{"							{ return OPEN_CURLY_BRACKET; }
 "}"							{ return CLOSE_CURLY_BRACKET; }
-"#"							{ return HASHTAG; }
 "<"							{ return LESS_THAN; }
 ">"							{ return GREATER_THAN; }
 "("							{ return OPEN_PARENTHESES; }
@@ -26,21 +26,25 @@
 "!="						{ return NOT_EQUAL;}
 ">="						{ return EQUAL_GREATER_THAN;}
 "<="						{ return EQUAL_LESS_THAN;}
+
+"||"						{ return OR; }
+"&&"						{ return AND; }
+
 "*"							{ return MULTIPLY;}
 "/"							{ return DIVIDE;}
+"->"						{ return ARROW; }
 "int"						{ return INTEGER_TYPE; }
-"double"					{ return DOUBLE_TYPE; }
 "string"					{ return STRING_TYPE; }
+"boolean"					{ return BOOLEAN_TYPE; }
 "return"					{ return RETURN; }
 "include"					{ return INCLUDE;}
 "for"						{ return FOR;}
 "while"						{ return WHILE;}
 "if"						{ return IF;}
 "else"						{ return ELSE;}
-"elseif"					{ return ELSEIF;}
-"on"						{ return ON;}
-"run"						{ return RUN;}
-[0-9]+.[0-9]+				{ return DOUBLE; }
+"else if"					{ return ELSEIF;}
+"true"|"false"				{ return BOOLEAN; }
+"func"						{ return FUNCTION; }
 [0-9]+						{ yylval.integer = atoi(yytext) ; return INTEGER; }
 [a-zA-Z]([a-zA-Z0-9_])*		{ 	yylval.string = malloc(yyleng+1);
 								strcpy(yylval.string,yytext);
@@ -55,6 +59,3 @@
 \n							{ yylineno++; }
 
 %%
-
-
-

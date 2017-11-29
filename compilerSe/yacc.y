@@ -1,32 +1,28 @@
 %{
 	#include <stdio.h>
 	#include <stdlib.h>
-	extern void yyerror(char *);	
-	extern int yytext();
+	extern void yyerror(char *);
 	extern int yylex();
-
+	extern int yylineno;
+	extern char * yytext;
 %}
 
 %union {char * string ; int integer;}
-%token QUOTE
+
 %token SEMICOLON
 %token OPEN_CURLY_BRACKET
 %token CLOSE_CURLY_BRACKET
-%token HASHTAG
-
 %token OPEN_PARENTHESES
 %token CLOSE_PARENTHESES
 %token ADD
 %token SUBSTRACT
 %token <integer> INTEGER
-%token <double> DOUBLE
 %token <string> VARIABLE
+%token <integer> BOOLEAN
 %token <string> STRING
 %token INTEGER_TYPE
-%token DOUBLE_TYPE
 %token STRING_TYPE
-%token ACTION_TYPE
-
+%token BOOLEAN_TYPE
 %token INCLUDE
 %token COLON
 %token FOR
@@ -34,8 +30,6 @@
 %token IF
 %token ELSE
 %token ELSEIF
-%token ON
-%token RUN
 %token EQUAL
 %token NOT_EQUAL
 %token GREATER_THAN
@@ -44,66 +38,89 @@
 %token LESS_THAN
 %token MULTIPLY
 %token DIVIDE
-
-
 %token RETURN
+%token START
+%token AND
+%token OR
+%token FUNCTION
+%token ARROW
+
+%left ADD SUBSTRACT
+%left MULTIPLY DIVIDE
+
+%left EQUAL NOT_EQUAL
+%left EQUAL_LESS_THAN EQUAL_GREATER_THAN LESS_THAN GREATER_THAN
+%left OR AND
+
 
 %start Start
 
+
 %%
 
-Start : Include Body	{;}																												
-			| Body	{;}											
-Include : HASHTAG INCLUDE LESS_THAN VARIABLE GREATER_THAN SEMICOLON	{;}
-Body : Function Body	{;}
-			| Function	{;}
-Function : Type VARIABLE OPEN_PARENTHESES Parameters CLOSE_PARENTHESES OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET	{;}
-			| Type VARIABLE OPEN_PARENTHESES CLOSE_PARENTHESES OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET	{;}
-Parameters : Parameter COLON Parameters	{;}
-			| Parameter	{;}
-Parameter : Type VARIABLE	{;}
-Sentences : Sentences Sentence	{;}
-			|Sentence	{;}
-Sentence :	| Cicle SEMICOLON	{;}
-			| Assignment SEMICOLON	{;}
-			| Declaration SEMICOLON	{;}
-			| Return SEMICOLON	{;}
-			| Expression SEMICOLON													 							{ ; }
-Assignment : VARIABLE EQUAL Expression																			{ ; } 
-Declaration : Type VARIABLE EQUAL Expression																	{ ; }
-		| Type VARIABLE																							{ ; }
-Cicle : FOR OPEN_PARENTHESES Assignment SEMICOLON Condition SEMICOLON Assignment CLOSE_PARENTHESES OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET	{;}
-Cicle : WHILE OPEN_PARENTHESES Condition CLOSE_PARENTHESES OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET	{;}
-Expression : %prec Expression AritmeticOp Expression 															{ ; }
-			| Value																								{ ; }
-			| VARIABLE																							{ ; }
-AritmeticOp : ADD																									{ ; }
-			| SUBSTRACT																							{ ; }
-			| MULTIPLY																							{ ; }
-			| DIVIDE																							{ ; }
-Condition  : %prec Condition LogicOp Condition 																	{ ; }
-			| Expression																						{ ; }
-			| OPEN_PARENTHESES Condition CLOSE_PARENTHESES														{ ; }
-LogicOp : EQUAL EQUAL 																							{ ; }
-		| NOT_EQUAL 																							{ ; }
-		| EQUAL_LESS_THAN																						{ ; }
-		| EQUAL_GREATER_THAN																					{ ; }
-		| LESS_THAN 																							{ ; }
-		| GREATER_THAN 																							{ ; }
+Start: Body
+Body: Functions
+Functions: Functions Function
+		| Function
+Function: StartFn
+		| FUNCTION VARIABLE OPEN_PARENTHESES CLOSE_PARENTHESES RetrunType OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET
+		| FUNCTION VARIABLE OPEN_PARENTHESES Paramenters CLOSE_PARENTHESES RetrunType OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET
+StartFn: START OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET
+Paramenters: Paramenters COLON Parameter
+			| Parameter
+Parameter: Type VARIABLE
+RetrunType: /* empty */
+		| ARROW Type
 
-Value : INTEGER																									{ ; }
-		| DOUBLE																								{ ; }
-		| STRING																								{ ; }
-Return : RETURN Expression																						{ ; }
-Type : INTEGER_TYPE	{;}
-			| DOUBLE_TYPE	{;}
-			| ACTION_TYPE	{;}
-			| STRING_TYPE	{;}
-
+Sentences: /* empty */
+		| Sentences Sentece
+Sentece: Assignment SEMICOLON
+		| Declaration SEMICOLON
+		| Return SEMICOLON
+		| If
+		| While
+		| For
+		| FunctionCall SEMICOLON
+Assignment: VARIABLE EQUAL Expression
+Declaration: Type VARIABLE EQUAL Expression
+		| Type VARIABLE
+Return: RETURN Expression
+Type: INTEGER_TYPE
+	| STRING_TYPE
+	| BOOLEAN_TYPE
+Expression: Value
+	| VARIABLE
+	| FunctionCall
+ 	| Expression ADD Expression
+	| Expression SUBSTRACT Expression
+	| Expression MULTIPLY Expression
+	| Expression DIVIDE Expression
+Value: INTEGER
+If: IF OPEN_PARENTHESES Condition CLOSE_PARENTHESES OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET
+While: WHILE OPEN_PARENTHESES Condition CLOSE_PARENTHESES OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET
+For: FOR OPEN_PARENTHESES Assignment SEMICOLON Condition SEMICOLON Assignment CLOSE_PARENTHESES OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET
+Condition: Expression LogicalOp Expression
+ 		| Condition OR Condition
+		| Condition AND Condition
+		| OPEN_PARENTHESES Condition CLOSE_PARENTHESES
+		| BOOLEAN
+		| FunctionCall
+LogicalOp: EQUAL EQUAL
+		| NOT_EQUAL
+		| EQUAL_LESS_THAN
+		| EQUAL_GREATER_THAN
+		| LESS_THAN
+		| GREATER_THAN
+FunctionCall: VARIABLE OPEN_PARENTHESES CLOSE_PARENTHESES
+		| VARIABLE OPEN_PARENTHESES FnParameters CLOSE_PARENTHESES
+FnParameters: FnParameters COLON FnParameter
+		| FnParameter
+FnParameter: Expression
+		| STRING
 
 
 %%
 
 void yyerror (char *s) {
-	fprintf(stderr, "%s\n", s);
+	printf("%s in line %d, reading %s\n", s, yylineno, yytext);
 }
