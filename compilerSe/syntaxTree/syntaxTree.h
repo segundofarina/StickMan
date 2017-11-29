@@ -7,8 +7,8 @@
 /* TYPES */
 typedef enum {INTEGER_TYPE, DOUBLE_TYPE, STRING_TYPE} typeOp;
 typedef enum {START_FN, FUNCTION} typeFunction;
-typedef enum {ASSIGMENT, DECLARATION, RETURN, IF, WHILE, FOR, FUNCTION_CALL, MAN_ACTION} typeSentence;
-typedef enum {ASSIGMENT_EXPRESSION, ASSIGMENT_INCREMENT, ASSIGMENT_MAN} typeAssigment;
+typedef enum {ASSIGNMENT, DECLARATION, RETURN, IF, WHILE, FOR, FUNCTION_CALL, MAN_ACTION} typeSentence;
+typedef enum {ASSIGNMENT_EXPRESSION, ASSIGNMENT_INCREMENT, ASSIGNMENT_MAN} typeAssigment;
 typedef enum {EQUAL, ADD_EQUAL, SUBSTRACT_EQUAL, MULTIPLY_EQUAL, DIVIDE_EQUAL} typeAssigmentOp;
 typedef enum {INCREMENT_ADD, INCREMENT_SUBSTRACT} typeIncrementOp;
 typedef enum {DECLARATION_DEC, DECLARATION_ASIGN} typeDeclaration;
@@ -80,24 +80,24 @@ typedef struct incOpNode {
 	runFn runCode;
 } incOpNode;
 
-typedef struct assigmentOpNode {
+typedef struct assignmentOpNode {
 	typeAssigmentOp operator;
 	runFn runCode;
-} assigmentOpNode;
+} assignmentOpNode;
 
 typedef struct typeNode {
 	typeOp type;
 	runFn runCode;
 } typeNode;
 
-typedef struct assigmentNode {
-	typeAssigment assigmentType;
-	assigmentOpNode * assigmentOp;
+typedef struct assignmentNode {
+	typeAssigment assignmentType;
+	assignmentOpNode * assignmentOp;
 	expressionNode * expression;
 	incOpNode * incOp;
 	manAttributeNode * manAttribute;
 	runFn runCode;
-} assigmentNode;
+} assignmentNode;
 
 typedef struct declarationNode {
 	typeDeclaration declarationType;
@@ -127,15 +127,15 @@ typedef struct whileNode {
 } whileNode;
 
 typedef struct forNode {
-	assigmentNode * assigment1;
-	assigmentNode * assigment2;
+	assignmentNode * assignment1;
+	assignmentNode * assignment2;
 	conditionNode * condition;
 	struct sentencesNode * sentences;
 	runFn runCode;
 } forNode;
 
 typedef struct functionCallNode {
-	fnParametersNode * fnParameter;
+	fnParametersNode * fnParameters;
 	runFn runCode;
 } functionCallNode;
 
