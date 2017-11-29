@@ -73,7 +73,7 @@ Function: StartFn
 		| FUNCTION VARIABLE OPEN_PARENTHESES Paramenters CLOSE_PARENTHESES ReturnType OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET
 StartFn: START OPEN_CURLY_BRACKET Sentences CLOSE_CURLY_BRACKET
 Paramenters: Paramenters COLON Parameter
-			| Parameter
+		| Parameter
 Parameter: Type VARIABLE
 ReturnType: /* empty */
 		| ARROW Type
