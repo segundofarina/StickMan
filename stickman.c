@@ -18,6 +18,13 @@ void printFigure(char * figure[] , int position){
 	system("clear");
 }
 
+
+
+
+
+
+
+
 void barrellroll(void){	
 
 char * barrell[12][3];
