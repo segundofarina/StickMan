@@ -1,5 +1,5 @@
 #define FRAME_WIDTH 12
-#define FRAME_HEIGHT 20
+#define FRAME_HEIGHT 10
 #define SCREEN_SPACES 12
 #define ACTION_LENGTH 4
 #define LEFT 1
