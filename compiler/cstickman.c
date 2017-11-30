@@ -1,4 +1,3 @@
-
 extern int yylex();
 extern int yyparse();
 extern int yylineno;
@@ -6,3 +5,6 @@ extern int yylineno;
 int main(){
 	return yyparse();
 }
+
+
+// c compiled file pointer

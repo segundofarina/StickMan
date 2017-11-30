@@ -2,9 +2,6 @@
 #define FRAME_HEIGHT 20
 #define SCREEN_SPACES 12
 #define ACTION_LENGTH 8
-#define LEFT 1
-#define RIGHT -1
-#define FRONT 0
 #define ERROR -100
 #define MAX_LENGTH_NAME 100
 
@@ -32,6 +29,8 @@ void sleep_ms(int milliseconds) // cross-platform sleep function
     usleep(milliseconds * 1000);
 #endif
 }
+
+typedef enum {LEFT, RIGHT, FRONT} direction;
 
 int executeaction(char * name , int direction);
 
