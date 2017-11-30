@@ -1,0 +1,2 @@
+ #include <stdio.h>
+int main() { int repetitions = 0 ; say( "hola!" ) ; while( repetitions < 15 ) { checkEndOfScreen( ) ; if( isPar( ) ){ moveAndJump( ) ; } else{ man_action_unary() ; } repetitions ++ ; } say( "chau!" ) ; return 0; } void moveAndJump( ){ man_action_binary() ; } int isPar( ){ if( position % 2 == 0 ){ return 0 ; } return 1 ; } void say( char * str ){ man_action_unary() ; } void checkEndOfScreen( ){ if( position == eosR ){ funcion_set_attr( direction , left ) ; } if( position == eosL ){ funcion_set_attr( direction , right ) ; } } 

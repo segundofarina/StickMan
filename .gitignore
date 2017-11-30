@@ -15,6 +15,9 @@ lex.yy.c
 # Unignore all dirs
 !*/
 
+# Unignore makefile
+!Makefile
+
 ### Above combination will ignore all files without extension ###
 
 # Ignore files with extension `.class` & `.sm`
