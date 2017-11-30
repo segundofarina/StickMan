@@ -24,7 +24,7 @@ int isVariable (char * string){
     return(1);
 }
 
-void printMovement (char movement [ACTION_LENGTH][FRAME_WIDTH][FRAME_HEIGHT], int position, int direction){
+void printMovement (char movement [ACTION_LENGTH][FRAME_HEIGHT][FRAME_WIDTH], int position, int direction){
 	int i,j,k,l;
 	int offset = FRAME_WIDTH*(SCREEN_SPACES - position);
 	if(position > SCREEN_SPACES){
@@ -58,18 +58,18 @@ void printMovement (char movement [ACTION_LENGTH][FRAME_WIDTH][FRAME_HEIGHT], in
 
 
 
-void fillFrames(FILE * fp ,action a){
+void fillFrames(FILE * fp ,action * a){
 	char c;
 	int i,j,k;
 	for (i = 0; i< ACTION_LENGTH ;i++){
 		for(j = 0; j< FRAME_HEIGHT; j++){			
-			for(k=0 ;(c =fgetc(fp)) != '\n' && k< FRAME_WIDTH; k++){
-				a.frames[i][j][k] = c;
+			for(k=0 ;(c =fgetc(fp)) != '\n' && k< FRAME_WIDTH+1; k++){
+				(*a).frames[i][j][k] = c;
 			}
 				/*Complete rest of the line with ' ' */
 			if(k<FRAME_WIDTH){
 				while(k!=FRAME_WIDTH ){
-					a.frames[i][j][k++]=' ';
+					(*a).frames[i][j][k++]=' ';
 				}
 			}
 			
@@ -132,7 +132,7 @@ void openActions(char * fileRoute){
 			printf("Not a valid stick library.\n");
 			return;
 		}
-		fillFrames(fp, a);
+		fillFrames(fp, &a);
 		
 
 		
@@ -148,7 +148,7 @@ void openActions(char * fileRoute){
 
 	for (int i = 0; i < actionsLen; ++i)
 	{
-		//printMovement( actions[i].frames,4 ,actions[i].direction);
+		printMovement( actions[i].frames,4 ,actions[i].direction);
 	}
 		
 	fclose(fp);
