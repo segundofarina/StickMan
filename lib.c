@@ -28,7 +28,7 @@ void printMovement (char movement [ACTION_LENGTH][FRAME_HEIGHT][FRAME_WIDTH], in
 	int i,j,k,l;
 	int offset = FRAME_WIDTH*(SCREEN_SPACES - position);
 	if(position > SCREEN_SPACES){
-		printf("Inavlid postion\n");
+		printf("Inavlid position\n");
 	}
 	
 
