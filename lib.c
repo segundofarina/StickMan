@@ -5,6 +5,7 @@
 #include <string.h>
 #include <regex.h>
 #include <ctype.h>
+#define SLEEP_MS 300
 
 
 action * actions;
@@ -67,7 +68,7 @@ void printMovement (char movement [ACTION_LENGTH][FRAME_HEIGHT][FRAME_WIDTH], in
 			}
 			printf("\n");
 		}
-		sleep_ms(150);
+		sleep_ms(SLEEP_MS);
 		system("clear");
 
 	}
