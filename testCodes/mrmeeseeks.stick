@@ -1,0 +1,57 @@
+include lib.sticklib
+include other.sticklib
+
+start{
+	int times = 3;
+
+	man->helloworldLeft;
+	man-> yield "Look at me! I'm Mr Meeseeks";
+	man->helloworldRight;
+
+	man.direction = right;
+	man-> yield "walk with me...";
+	while(man.position != eosR){
+		man->walk
+		man.position++;
+	}
+
+	man-> yield "how about a little workout??";
+	while(times){
+		man->weightLifting;
+	}
+
+	man-> yield "or some squats";
+	while(times){
+		man->squat;
+	}
+
+	man.direction = left;
+	man->roll;
+
+	man-> yield "like a ride by bike?";
+	man->ridingBike;
+
+	man-> yield "oh fuck";
+	man-> yield "doesn't matter";
+	man->comesArroundGoesArround;
+
+	man-> yield "do you know this one?";
+	times = 3;
+	while(times){
+		man->headsholders;
+		times--;
+	}
+
+	man-> yield "let's go back";
+	man.direction = left;
+	times = 3;
+	while(times){
+		man->jump;
+		times--;
+	}
+
+	man-> yield "what a day";
+	man-> yield "Goodbye!!";
+	man->helloworldLeft;
+	man->helloworldRight;
+}

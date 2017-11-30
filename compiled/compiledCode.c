@@ -1,2 +1,1 @@
-#include <stdio.h>
-int main() { int times = 5 ; while( times > 0 ) { if( direction == right ){ justDance( ) ; funcion_set_attr( direction , left ) ; } else{ workOut( ) ; } times -- ; } if( direction == right ){ man_action_unary() ; funcion_set_attr( directon , left ) ; man_action_unary() ; } else{ man_action_unary() ; } man_action_unary() ; return 0; } void keepSpinning( int spin ){ while( spin > 0 ) { man_action_unary() ; spin -- ; } } void justDance( ){ int spin = 5 ; man_action_unary() ; keepSpinning( spin ) ; man_action_unary() ; } void workOut( ){ man_action_unary() ; funcion_set_attr( direction , left ) ; man_action_unary() ; man_action_unary() ; } 
+syntax error in line 1, reading lib
