@@ -4,6 +4,7 @@
 #define ACTION_LENGTH 8
 #define ERROR -100
 #define MAX_LENGTH_NAME 100
+#define SLEEP_MS 300
 
 
 
@@ -30,14 +31,26 @@ void sleep_ms(int milliseconds) // cross-platform sleep function
 #endif
 }
 
-typedef enum {LEFT, RIGHT, FRONT} direction;
-
-int executeaction(char * name , int direction);
-
-int existsAction(char * name , int dir);
-
 typedef struct action {
 	char * name;
 	char frames [ACTION_LENGTH][FRAME_HEIGHT][FRAME_WIDTH];
 	int direction;
 } action;
+
+typedef enum {LEFT, RIGHT, FRONT} direction;
+
+
+
+
+int executeaction(char * name , int direction);
+
+int existsAction(char * name , int dir);
+
+int getPosition();
+
+int getDirection();
+
+void setPosition(int pos);
+
+void setDirection(direction dir);
+

@@ -5,7 +5,7 @@
 #include <string.h>
 #include <regex.h>
 #include <ctype.h>
-#define SLEEP_MS 300
+
 
 action *actions;
 int actionsLen = 0;

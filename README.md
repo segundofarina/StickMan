@@ -1,6 +1,6 @@
 # Stickman Code Definition
 
-Stickman is a basic programming language, just code and see the person move!
+Stickman is a basic programming language for controlling a stickman. The output is printed in console.
 
 ### Code entry point
 The code's entry point is defined as:
@@ -117,9 +117,9 @@ func add( int a, int b ) -> int {
 
 
 
-### Adding additional movements
-There is a basic set of movements included in every stickman code. If you need more you are free to create them and include them.
-To include an external library of movements you need to add a the following code before the `start` function.
+### Adding additional actions
+There is a basic set of actions included in every stickman code. If you need more you are free to create them and include them.
+You can add additional movements to the languague by creating your own library. To include an external library of actions you need to add a the following code before the `start` function.
 ```
 include yourFile.stLib
 
@@ -128,4 +128,17 @@ start {
 }
 ```
 
-Then you can use them as any other action.
+Then you can use them as any other action, just type `man.yourAction` and the action is executed.
+
+### Creating your own library 
+For creating yor own library you need to create a file with the ".libStick" extension and follow this fromat.
+
+* First line: integer with the number of actions in the library.
+
+Then you have to proceede to define the actions one below the other separated by a **'\n'**
+
+An action is defined by a header an it's egiht frames separated by **'\n'**:
+* **Header**: constist of the **name** of the action followed by **[left]** , **[right]** or **[front]** which indicates the direction of the action. (There is no blankspace between the name and the direction).
+* **Frame** : consits of 20 lines and each line consists of 12 characters followed by a **'\n'**.
+
+
