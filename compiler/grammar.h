@@ -37,41 +37,50 @@ typedef struct function
 	int_var integer_variables[VARIABLES_QUANTITY];
 	string_var string_variables[VARIABLES_QUANTITY];
 	boolean_var boolean_variables[VARIABLES_QUANTITY];
-//	struct function functions_variables[VARIABLES_QUANTITY];
 
 	int integer_variables_length;
 	int string_variables_length;
 	int boolean_variables_length;
 } function;
 
-struct parameter * transform(char * parameters);
-
-int cmpParams(parameter * p1, parameter * p2);
-
+// Returns 1 if exists and 0 if it doesn't
 int existsFunction(char * name, char * returnType, char * parameters);
 
+// Returns a the recently added function or 0 if it already existed
 function * addFunction(char * name, char * returnType, char * parameters);
+
 
 void currentFunction(char * name, char * returnType, char * parameters);
 
+// Returns 0 if it doesn't exists and 1 if it does exists
 int existsInt(char * name);
 
+// Returns 0 if it doesn't exists and 1 if it does exists
 int existsString(char * name);
 
+// Returns 0 if it doesn't exists and 1 if it does exists
 int existsBoolean(char * name);
 
+// Returns 0 if it doesn't exists and 1 if it does exists
 int existsFile(char * name);
 
+// Return 0 if it has been added and 1 if it already existed
 int addInt(char * name, int value);
 
+// Return 0 if it has been added and 1 if it already existed
 int addBoolean(char * name, int value);
 
+// Return 0 if it has been added and 1 if it already existed
 int addString(char * name, char * value);
 
+// Return 0 if it has been added and 1 if it already existed
 int addFile(char * name);
 
+// Return 0 if it has been updated and 1 if it already existed
 int updateInt(char * name, int value);
 
+// Return 0 if it has been updated and 1 if it already existed
 int updateBoolean(char * name, int value);
 
+// Return 0 if it has been updated and 1 if it already existed
 int updateString(char * name, char * value);

@@ -22,7 +22,7 @@ struct parameter * transform(char * parameters){
 		return NULL;
 	}
 
-	while(parameters[i] != ' '&& parameters[i] != 0 ){
+	while(parameters[i] != ' ' && parameters[i] != 0 ){
 		type[j] = parameters[i];
 		j++;
 		i++;
@@ -53,7 +53,6 @@ struct parameter * transform(char * parameters){
 	strcpy(parameter->name,name);
 
 	parameter->next = transform(parameters+i);
-	
 
 	return parameter;
 }
@@ -78,9 +77,6 @@ int existsFunction(char * name, char * returnType, char * parameters){
 	return 0;
 }
 
-
-
-
 function * addFunction(char * name, char * returnType, char * parameters){
 	if(!existsFunction(name,returnType,parameters)){
 		struct parameter * parameter = transform(parameters);
@@ -94,6 +90,7 @@ function * addFunction(char * name, char * returnType, char * parameters){
 		function->integer_variables_length = 0;
 		function->string_variables_length = 0;
 	 	function->boolean_variables_length = 0;
+
 		return function;
 	}
 	return NULL;
@@ -236,7 +233,12 @@ int updateString(char * name, char * value){
 	return 1;
 }
 
+void testFunction(){
+	currentFunction("main","void","int a,int b,string c");
+}
+
 
 int main(){
+	testFunction();
 	return 0;
 }
