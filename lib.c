@@ -5,6 +5,7 @@
 #include <string.h>
 #include <regex.h>
 #include <ctype.h>
+#define YIELD_WIDTH 20
 #define SLEEP_MS 300
 
 action *actions;
@@ -371,6 +372,32 @@ int executeaction2(char *name, int dir, int position)
 		return 0;
 	}
 	return ERROR;
+}
+
+char ** toMatrix(char * yield){
+	int length = strlen(yield);
+	int mod;
+	if(length < YIELD_WIDTH){
+		char ** ans = malloc(sizeof(char *));
+		ans[0] = yield;
+		return ans;
+	}
+	mod = length%YIELD_WIDTH;
+	if(!mod){
+		mod = length/YIELD_WIDTH;
+	}else{
+		mod = length/YIELD_WIDTH + 1;
+	}
+	int j,k = 0;
+	char ** ans = malloc(mod*sizeof(char *));
+	for(int i = 0 ; i < mod ; i++){
+		ans[i] = malloc((YIELD_WIDTH+1)*sizeof(char));
+		for(j = 0; j < YIELD_WIDTH ; j++){
+			ans[i][j] = yield[k++];
+		}
+		ans[i][j] = 0;
+	}
+	return ans;
 }
 
 int main(int argc, char const *argv[])

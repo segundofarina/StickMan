@@ -965,7 +965,7 @@ o  \   / o
     O O
     | |
    oO Oo
-jump[right]
+jumpwalk[right]
     
     
     
@@ -1126,7 +1126,7 @@ Oo   Oo
      O 
      |
      Oo 
-jump[left]
+jumpwalk[left]
     
     
     
@@ -1448,7 +1448,7 @@ o  \   / o
   o     o
    \   /
   oO   Oo
-  sideWalk[right]
+  squatwalk[right]
 
   
   
@@ -1609,7 +1609,7 @@ o  \   / o
     O O
     | |
    oO Oo
-sideWalk[left]
+squatwalk[left]
 
   
   
@@ -1770,7 +1770,7 @@ sideWalk[left]
     O O
     | |
    oO Oo
-helloworldLeft[front]
+moveleftarm[front]
 
   
   
@@ -1931,7 +1931,7 @@ helloworldLeft[front]
     O O
     | |
    oO Oo
-helloworldright[front]
+moverightarm[front]
 
   
   
