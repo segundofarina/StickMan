@@ -53,7 +53,7 @@ void printMovement (char movement [ACTION_LENGTH][FRAME_HEIGHT][FRAME_WIDTH], in
 			}else{
 				strcat(spaces," ");
 			}
-		}else if( direction == LEFT ){
+		}else if( direction == LEFT && position !=0){
 			if(i%2){
 				spaces+=1;
 			}else{
@@ -161,7 +161,11 @@ int openActions(char * fileRoute){
 	int ans,quantity,i;
 	char * buffer;
 	FILE *fp = fopen(fileRoute, "r");
-
+	if(fp == NULL){
+		printf("not a valid route\n");
+		return ERROR;
+	}
+	
 	getNextLine(fp,&buffer);
 	quantity= atoi(buffer);
 	if(quantity == 0){
@@ -171,7 +175,6 @@ int openActions(char * fileRoute){
 
 	for ( i=0; ans!=EOF && ans!= ERROR && i<quantity ;i++  ){
 		action a;
-
 		ans=fillHeader(fp, &a);
 		if( ans == ERROR){
 			break;
@@ -253,7 +256,9 @@ int executeaction2(char * name , int dir , int position){
 
 
 int main(int argc, char const *argv[]){
-		int error= openActions("other.stickLib");
+	
+	int error;
+	error= openActions("other.stickLib");
 		if(error != ERROR){
 			 //executeaction("walk", RIGHT);
 			 //executeaction("walk", RIGHT);
