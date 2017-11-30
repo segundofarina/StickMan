@@ -7,11 +7,17 @@ static int_var integer_variables[VARIABLES_QUANTITY];
 static string_var string_variables[VARIABLES_QUANTITY];
 static boolean_var boolean_variables[VARIABLES_QUANTITY];
 static functions functions_variables[VARIABLES_QUANTITY];
+static char * movements_files[FILES_QUANTITY];
 
 static int integer_variables_length = 0;
 static int string_variables_length = 0;
 static int boolean_variables_length = 0;
 static int functions_variables_length = 0;
+static int movements_files_lenght = 0;
+
+
+
+
 
 
 struct parameter * transform(char * parameters){
@@ -99,6 +105,15 @@ int existsVariable(char * name){
 	return 0;
 }
 
+int existsFile(char * name){
+	for(int i=0 ; i < movements_files_lenght ; i++){
+		if(!strcmp(movements_files[i],name)){
+			return 1;
+		}
+	}
+	return 0;
+}
+
 void addInt(char * name, int value){
 	int_var * aux = malloc( sizeof(int_var) );
 	aux->name = name;
@@ -135,6 +150,13 @@ void addFunction(char * name, char * returnType, char * parameters){
 		functions_variables[functions_variables_length] = (*function);
 		functions_variables_length++;
 	}
+}
+
+void addFile(char * name){
+ if(!existsFile(name)){
+ 	movements_files[movements_files_lenght] = name;
+ 	movements_files_lenght++;
+ }
 }
 
 void updateInt(char * name, int value){
@@ -285,8 +307,17 @@ void testFunctions(){
 	return;
 }
 
+void testFiles(){
+	char name[] = "HOLAHOLA";
+	char name2[] = "blahblah";
+	printf("%d\n", existsFile("HOLAHOLA"));
+	addFile("HOLAHOLA");
+	printf("%d\n", existsFile("blahblah"));
+	addFile("blahblah");
+	printf("%d\n", existsFile("blahblah"));
+ }
+
 
 int main(){
-	testFunctions();
 	return 0;
 }

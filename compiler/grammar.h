@@ -1,5 +1,6 @@
 #define VARIABLES_QUANTITY 50
 #define MAX_FUNCTION_NAME 50
+#define FILES_QUANTITY 50
 
 typedef struct int_var 
 {
