@@ -9,6 +9,9 @@
 action * actions;
 int actionsLen=0;
 
+int position=0;
+int direction= FRONT;
+
 int isVariable (char * string){
 	 int    status;
     regex_t    re;
@@ -28,12 +31,13 @@ void printMovement (char movement [ACTION_LENGTH][FRAME_HEIGHT][FRAME_WIDTH], in
 	int i,j,k,l;
 	int offset = FRAME_WIDTH*(SCREEN_SPACES - position);
 	if(position > SCREEN_SPACES){
-		printf("Inavlid position\n");
+		printf("Inavlid postion\n");
+		return ;
 	}
 	
 
-	char spaces[FRAME_WIDTH*SCREEN_SPACES+1]={0};
-	for(k=0; k<FRAME_WIDTH*SCREEN_SPACES ;k++){
+	char * spaces = malloc(position*FRAME_WIDTH+1);
+	for(k=0; k<position*FRAME_WIDTH ;k++){
 		spaces[k]=' ';
 	}
 	spaces[k]=0;
@@ -41,8 +45,14 @@ void printMovement (char movement [ACTION_LENGTH][FRAME_HEIGHT][FRAME_WIDTH], in
 	
 
 	for (i=0; i<ACTION_LENGTH ;i++){
+		if( direction == RIGHT ){	
+			strcat(spaces,"   ");
+		}else if( direction == LEFT ){
+			spaces+=3;
+		}
 		for(j=0; j<FRAME_HEIGHT; j++){
-			printf("%s", (spaces + (i*2)*direction  +offset));
+			
+			printf("%s", spaces );
 			for(int k=0 ; k< FRAME_WIDTH; k++){
 				printf("%c",movement[i][j][k]);
 			}
@@ -63,7 +73,7 @@ void fillFrames(FILE * fp ,action * a){
 	int i,j,k;
 	for (i = 0; i< ACTION_LENGTH ;i++){
 		for(j = 0; j< FRAME_HEIGHT; j++){			
-			for(k=0 ;(c =fgetc(fp)) != '\n' && k< FRAME_WIDTH+1; k++){
+			for(k=0 ;(c =fgetc(fp)) != '\n' && k< FRAME_WIDTH+1 && c!=EOF; k++){
 				(*a).frames[i][j][k] = c;
 			}
 				/*Complete rest of the line with ' ' */
@@ -148,16 +158,83 @@ void openActions(char * fileRoute){
 
 	for (int i = 0; i < actionsLen; ++i)
 	{
-		printMovement( actions[i].frames,4 ,actions[i].direction);
+		//printMovement( actions[i].frames, 4 ,actions[i].direction);
 	}
 		
 	fclose(fp);
 
 }
+
+int isValidAction(char * name , int dir){
+	int i;
+	for(i=0 ; i<actionsLen; i++){
+		if(strcmp(name, actions[i].name) == 0 && actions[i].direction == dir){
+			return i;
+		}
+	}
+	return -1;
+}
+
+int getPosition(){
+	return position;
+}
+int getDirection(){
+	return direction;
+}
+
+void movePosition(int dir ){
+	if (dir == RIGHT){
+		if(position < SCREEN_SPACES){
+			position+=1;
+		}
+		direction = RIGHT;
+	}else if( dir == LEFT){
+		if(position > 0){
+			position-=1;
+		}
+		direction = LEFT;
+	}else if (dir == FRONT){
+		direction = FRONT;
+	}
+}
+
+
+int executeaction(char * name , int dir){
+	int i;
+	if((i=isValidAction(name,dir)) >= 0 ) {
+		printMovement( actions[i].frames, position ,actions[i].direction);
+		movePosition(dir);
+		return 0;
+	}
+	return -1;
+}
+int executeaction2(char * name , int dir , int position){
+	int i;
+	if((i=isValidAction(name,dir)) >= 0 ) {
+		printMovement( actions[i].frames, position ,actions[i].direction);
+		movePosition(dir);
+		return 0;
+	}
+	return -1;
+}
 		
 
 int main(int argc, char const *argv[]){
 		openActions("lib.stickLib");
+			while(1){
+				executeaction("walk",RIGHT);
+				executeaction("walk",RIGHT);
+				executeaction("walk",RIGHT);
+				executeaction("walk",RIGHT);
+				executeaction("walk",RIGHT);
+
+				executeaction("walk",LEFT);
+				executeaction("walk",LEFT);
+				executeaction("walk",LEFT);
+				executeaction("walk",LEFT);
+			}
+
+
 	return 0;
 }
 

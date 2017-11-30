@@ -7,7 +7,7 @@
 #define FRONT 0
 
 
-void executeaction(char * name , int direction, int position);
+int executeaction(char * name , int direction);
 
 
 typedef struct action {	
