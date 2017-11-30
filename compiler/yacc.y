@@ -133,7 +133,7 @@
 
 %%
 
-Start: Headers Functions								{ $$ = createStartNode($1,$2); }
+Start: Headers Functions								{ $$ = createStartNode($1,$2); ($$->runCode)($$);}
 Headers: /* empty */									{ $$ = createHeadersNode(); }
  		| Headers Header								{ $$ = addToHeadersNode($2,$1); }
 Header: INCLUDE FILE_NAME								{ $$ = createHeaderNode($2); }
