@@ -35,6 +35,8 @@ void sleep_ms(int milliseconds) // cross-platform sleep function
 
 int executeaction(char * name , int direction);
 
+int existsAction(char * name , int dir);
+
 typedef struct action {
 	char * name;
 	char frames [ACTION_LENGTH][FRAME_HEIGHT][FRAME_WIDTH];

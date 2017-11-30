@@ -53,7 +53,7 @@ void printMovement (char movement [ACTION_LENGTH][FRAME_HEIGHT][FRAME_WIDTH], in
 			}else{
 				strcat(spaces," ");
 			}
-		}else if( direction == LEFT ){
+		}else if( direction == LEFT && position !=0){
 			if(i%2){
 				spaces+=1;
 			}else{
@@ -161,7 +161,11 @@ int openActions(char * fileRoute){
 	int ans,quantity,i;
 	char * buffer;
 	FILE *fp = fopen(fileRoute, "r");
-
+	if(fp == NULL){
+		printf("not a valid route\n");
+		return ERROR;
+	}
+	
 	getNextLine(fp,&buffer);
 	quantity= atoi(buffer);
 	if(quantity == 0){
@@ -171,20 +175,23 @@ int openActions(char * fileRoute){
 
 	for ( i=0; ans!=EOF && ans!= ERROR && i<quantity ;i++  ){
 		action a;
-
 		ans=fillHeader(fp, &a);
 		if( ans == ERROR){
 			break;
 		}
 		ans=fillFrames(fp, &a);
-
-		if (ans != ERROR){
-			printf("Name: %s direction: %d \n",a.name,a.direction );
-
-			actions= realloc( actions, sizeof(action)*(actionsLen+1) );
-			memcpy( &(actions[actionsLen]) , &a , sizeof(action) );
-			actionsLen++;
+		if( ans == ERROR){
+			break;
 		}
+		if (existsAction(a.name, a.direction) >=0){
+			printf("line %d: Action of name: %s and direction %d already exists. \n",lineno ,a.name,a.direction);
+			return ERROR;
+		}
+
+		printf("Name: %s direction: %d \n",a.name,a.direction );	
+		actions= realloc( actions, sizeof(action)*(actionsLen+1) );
+		memcpy( &(actions[actionsLen]) , &a , sizeof(action) );
+		actionsLen++;
 	}
 	if( ans == ERROR || i!= quantity){
 		printf("ERROR\n");
@@ -194,7 +201,7 @@ int openActions(char * fileRoute){
 	return 0;
 }
 
-int isValidAction(char * name , int dir){
+int existsAction(char * name , int dir){
 	int i;
 	for(i=0 ; i<actionsLen; i++){
 		if(strcmp(name, actions[i].name) == 0 && actions[i].direction == dir){
@@ -234,7 +241,7 @@ int executeaYield(char * string){
 
 int executeaction(char * name , int dir){
 	int i;
-	if((i=isValidAction(name,dir)) >= 0 ) {
+	if((i=existsAction(name,dir)) >= 0 ) {
 		printMovement( actions[i].frames, position ,actions[i].direction);
 		movePosition(dir);
 		return 0;
@@ -243,7 +250,7 @@ int executeaction(char * name , int dir){
 }
 int executeaction2(char * name , int dir , int position){
 	int i;
-	if((i=isValidAction(name,dir)) >= 0 ) {
+	if((i=existsAction(name,dir)) >= 0 ) {
 		printMovement( actions[i].frames, position ,actions[i].direction);
 		movePosition(dir);
 		return 0;
@@ -253,13 +260,15 @@ int executeaction2(char * name , int dir , int position){
 
 
 int main(int argc, char const *argv[]){
-		int error= openActions("other.stickLib");
-		if(error != ERROR){
-			 //executeaction("walk", RIGHT);
-			 //executeaction("walk", RIGHT);
-			 //executeaction("walk", RIGHT);
-			 //executeaction("walk", RIGHT);
-			 //executeaction("walk", RIGHT);
+	
+	int error1,error2;
+	error1= openActions("lib.stickLib");
+	error2= openActions("other.stickLib");
+	if (error1 == ERROR || error2 == ERROR){
+		return ERROR;
+	}
+			
+			 executeaction("jump", FRONT);
 			 //executeaction("walk", RIGHT);
 			 printf("Press 'y' characther to print all actions\n" );
 			 int ans =getchar();
@@ -267,7 +276,7 @@ int main(int argc, char const *argv[]){
 			 for (int i =0 ; i< actionsLen ; i++){
 				 executeaction(actions[i].name, actions[i].direction);
 			 }
-		 }
+
 			// executeaction("walk", LEFT);
 			// executeaction("walk", LEFT);
 			// executeaction("walk", LEFT);
