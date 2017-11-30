@@ -98,13 +98,17 @@ int fillHeader(FILE * fp ,action * a){
 	char * var;
 	char * attr;
 	ans = getNextLine(fp,&var);
+	if (strcmp(var, "") == 0){
+		printf("There is no header for action\n" );
+		return ERROR;
+	}
 	strtok_r (var, "[", &attr);
 
 	if( isVariable(var) ){
 					a->name =malloc(strlen(var));
 					strcpy(a->name,var);
 	}else {
-		printf("Not a valid name for library input: %s \n",var );
+		printf("Not a valid name for library input: %s . \n",var );
 		return ERROR;
 	}
 
@@ -160,7 +164,7 @@ int openActions(char * fileRoute){
 	getNextLine(fp,&buffer);
 	quantity= atoi(buffer);
 	if(quantity == 0){
-		printf("hodfdfla\n");
+		printf("First line must be a number indicating the number of actions expected a number but recieved %s\n",buffer);
 		return ERROR;
 	}
 
@@ -168,13 +172,18 @@ int openActions(char * fileRoute){
 		action a;
 
 		ans=fillHeader(fp, &a);
+		if( ans == ERROR){
+			break;
+		}
 		ans=fillFrames(fp, &a);
 
-		printf("Name: %s direction: %d \n",a.name,a.direction );
+		if (ans != ERROR){
+			printf("Name: %s direction: %d \n",a.name,a.direction );
 
-		actions= realloc( actions, sizeof(action)*(actionsLen+1) );
-		memcpy( &(actions[actionsLen]) , &a , sizeof(action) );
-		actionsLen++;
+			actions= realloc( actions, sizeof(action)*(actionsLen+1) );
+			memcpy( &(actions[actionsLen]) , &a , sizeof(action) );
+			actionsLen++;
+		}
 	}
 	if( ans == ERROR || i!= quantity){
 		printf("ERROR\n");
@@ -218,6 +227,10 @@ void movePosition(int dir ){
 }
 
 
+int executeaYield(char * string){
+ return 1;
+}
+
 int executeaction(char * name , int dir){
 	int i;
 	if((i=isValidAction(name,dir)) >= 0 ) {
@@ -247,9 +260,13 @@ int main(int argc, char const *argv[]){
 			 //executeaction("walk", RIGHT);
 			 //executeaction("walk", RIGHT);
 			 //executeaction("walk", RIGHT);
+			 printf("Press 'y' characther to print all actions\n" );
+			 int ans =getchar();
+			 if(ans == 'y'){
 			 for (int i =0 ; i< actionsLen ; i++){
 				 executeaction(actions[i].name, actions[i].direction);
 			 }
+		 }
 			// executeaction("walk", LEFT);
 			// executeaction("walk", LEFT);
 			// executeaction("walk", LEFT);
