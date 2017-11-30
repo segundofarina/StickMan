@@ -1,7 +1,7 @@
 #define FRAME_WIDTH 12
 #define FRAME_HEIGHT 20
 #define SCREEN_SPACES 12
-#define ACTION_LENGTH 4
+#define ACTION_LENGTH 8
 #define LEFT 1
 #define RIGHT -1
 #define FRONT 0
@@ -35,9 +35,8 @@ void sleep_ms(int milliseconds) // cross-platform sleep function
 
 int executeaction(char * name , int direction);
 
-typedef struct action {	
+typedef struct action {
 	char * name;
 	char frames [ACTION_LENGTH][FRAME_HEIGHT][FRAME_WIDTH];
 	int direction;
-} action; 
-
+} action;

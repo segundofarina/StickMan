@@ -47,9 +47,17 @@ void printMovement (char movement [ACTION_LENGTH][FRAME_HEIGHT][FRAME_WIDTH], in
 
 	for (i=0; i<ACTION_LENGTH ;i++){
 		if( direction == RIGHT ){
-			strcat(spaces,"   ");
+			if(i%2){
+				strcat(spaces,"  ");
+			}else{
+				strcat(spaces," ");
+			}
 		}else if( direction == LEFT ){
-			spaces+=3;
+			if(i%2){
+				spaces+=1;
+			}else{
+				spaces+=2;
+			}
 		}
 		for(j=0; j<FRAME_HEIGHT; j++){
 
@@ -59,7 +67,7 @@ void printMovement (char movement [ACTION_LENGTH][FRAME_HEIGHT][FRAME_WIDTH], in
 			}
 			printf("\n");
 		}
-		sleep_ms(300);
+		sleep_ms(150);
 		system("clear");
 
 	}
@@ -69,13 +77,17 @@ void printMovement (char movement [ACTION_LENGTH][FRAME_HEIGHT][FRAME_WIDTH], in
 int getNextLine(FILE * fp, char ** var){
 	int c,i=0;
 	char * line = malloc(MAX_LENGTH_NAME);
+
 	while( (c= fgetc(fp)) != '\n' && c!=EOF){
 		if(i < MAX_LENGTH_NAME*2 ){
+
 			line[i++]=c;
+
 		}
 	}
 	line[i]=0;
 	*var=line;
+	lineno++;
 	return c;
 }
 
@@ -86,7 +98,6 @@ int fillHeader(FILE * fp ,action * a){
 	char * var;
 	char * attr;
 	ans = getNextLine(fp,&var);
-	lineno++;
 	strtok_r (var, "[", &attr);
 
 	if( isVariable(var) ){
@@ -122,7 +133,6 @@ int fillFrames(FILE * fp ,action * a){
 		for(j = 0; j< FRAME_HEIGHT; j++){
 			char * line;
 			ans=getNextLine(fp,&line);
-			lineno++;
 			len=strlen(line);
 			if (len <= FRAME_WIDTH){
 				memcpy(a->frames[i][j],line,FRAME_WIDTH);
@@ -147,8 +157,10 @@ int openActions(char * fileRoute){
 	char * buffer;
 	FILE *fp = fopen(fileRoute, "r");
 
+	getNextLine(fp,&buffer);
 	quantity= atoi(buffer);
 	if(quantity == 0){
+		printf("hodfdfla\n");
 		return ERROR;
 	}
 
@@ -165,9 +177,11 @@ int openActions(char * fileRoute){
 		actionsLen++;
 	}
 	if( ans == ERROR || i!= quantity){
+		printf("ERROR\n");
 		return ERROR;
 	}
 	fclose(fp);
+	return 0;
 }
 
 int isValidAction(char * name , int dir){
@@ -225,15 +239,21 @@ int executeaction2(char * name , int dir , int position){
 
 
 int main(int argc, char const *argv[]){
-		openActions("other.stickLib");
-			// executeaction("walk", RIGHT);
-			// executeaction("walk", RIGHT);
-			// executeaction("walk", RIGHT);
-
+		int error= openActions("lib.stickLib");
+		if(error != ERROR){
+			 //executeaction("walk", RIGHT);
+			 //executeaction("walk", RIGHT);
+			 //executeaction("walk", RIGHT);
+			 //executeaction("walk", RIGHT);
+			 //executeaction("walk", RIGHT);
+			 //executeaction("walk", RIGHT);
+			 for (int i =0 ; i< actionsLen ; i++){
+				 executeaction(actions[i].name, actions[i].direction);
+			 }
 			// executeaction("walk", LEFT);
 			// executeaction("walk", LEFT);
 			// executeaction("walk", LEFT);
-
+}
 
 
 
