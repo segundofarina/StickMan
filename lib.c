@@ -239,7 +239,7 @@ int executeaction2(char * name , int dir , int position){
 
 
 int main(int argc, char const *argv[]){
-		int error= openActions("lib.stickLib");
+		int error= openActions("other.stickLib");
 		if(error != ERROR){
 			 //executeaction("walk", RIGHT);
 			 //executeaction("walk", RIGHT);
