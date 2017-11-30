@@ -45,7 +45,11 @@ void printMovement (char movement [ACTION_LENGTH][FRAME_HEIGHT][FRAME_WIDTH], in
 	
 
 	for (i=0; i<ACTION_LENGTH ;i++){
-		strcat(spaces,"   ");
+		if( direction == RIGHT ){	
+			strcat(spaces,"   ");
+		}else if( direction == LEFT ){
+			spaces+=3;
+		}
 		for(j=0; j<FRAME_HEIGHT; j++){
 			
 			printf("%s", spaces );
@@ -219,6 +223,15 @@ int main(int argc, char const *argv[]){
 		openActions("lib.stickLib");
 			while(1){
 				executeaction("walk",RIGHT);
+				executeaction("walk",RIGHT);
+				executeaction("walk",RIGHT);
+				executeaction("walk",RIGHT);
+				executeaction("walk",RIGHT);
+
+				executeaction("walk",LEFT);
+				executeaction("walk",LEFT);
+				executeaction("walk",LEFT);
+				executeaction("walk",LEFT);
 			}
 
 
