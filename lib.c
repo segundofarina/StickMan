@@ -58,7 +58,8 @@ void printMovement (char movement [ACTION_LENGTH][FRAME_WIDTH][FRAME_HEIGHT], in
 
 
 
-void fillFrames(File * fp ,action a){
+void fillFrames(FILE * fp ,action a){
+	char c;
 	int i,j,k;
 	for (i = 0; i< ACTION_LENGTH ;i++){
 		for(j = 0; j< FRAME_HEIGHT; j++){			
@@ -85,11 +86,11 @@ void openActions(char * fileRoute){
 		char buffer [200]={0};
 		i=0;
 		action a;
-		/*if((c =fgetc(fp)) == EOF){
+		if((c =fgetc(fp)) == EOF){
 				break;
 		}else{
-			fputc(c,fp);
-		}*/
+			ungetc(c,fp);
+		}
 		while ( (c =fgetc(fp)) != EOF ){
 			if( c == '[' ){
 				buffer[i]=0;
@@ -97,6 +98,7 @@ void openActions(char * fileRoute){
 				if( isVariable(buffer) ){
 					a.name =malloc(strlen(buffer));
 					strcpy(a.name,buffer);
+					printf("variable in buffer: %s in action: %s\n",buffer,a.name );
 					
 				} else {
 					printf("Not a valid name for library input: %s \n",buffer );
@@ -146,7 +148,7 @@ void openActions(char * fileRoute){
 
 	for (int i = 0; i < actionsLen; ++i)
 	{
-		printMovement( actions[i].frames,4 ,actions[i].direction);
+		//printMovement( actions[i].frames,4 ,actions[i].direction);
 	}
 		
 	fclose(fp);
