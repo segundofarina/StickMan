@@ -1,0 +1,63 @@
+
+
+<Start> ::= [<Headers>] <Functions>
+
+<Headers> ::= [<Headers>] <Header>
+<Header> ::= 'include' <FileName>
+
+<Functions> ::= [<Functions>] <Function>
+<Function> ::= <StartFn> | <Function> <Variable> '(' [<Parameters>] ')' [<ReturnType>] '{' [<Sentences>] '}'
+<StartFn> ::= 'start' '{' [<Sentences>] '}'
+
+<Paramenters> ::= [<Paramenters> ','] <Parameter>
+<Parameter> ::= <Type> <Variable>
+
+<ReturnType> ::= '->' <Type>
+<Return> ::= <Return> ( <Expression> | <Boolean> )
+<Type> ::= 'int' | 'string' | 'boolean'
+
+
+<Sentences> ::= [<Sentences>] <Sentece>
+<Sentece> ::= <Assignment> ';' | <Declaration> ';' | <Return> ';' | <If> | <While> | <For> | <FunctionCall> ';' | <ManAction> ';'
+
+<Assignment> ::= <Variable>  (<AssignmentOp> <Expression> | <IncOp> ) | <ManAttribute> '=' <Expression>
+<AssignmentOp> ::= '=' | '+=' | '-=' | '*=' | '/='
+
+<IncOp> ::= '++' | '--'
+
+<Declaration> ::= <Type> <Variable> ['=' <Expression>]
+
+<Expression> ::= <Integer> | <Variable> | <ManAttribute> | <FunctionCall> | <Expression> <ExpressionOp> <Expression> 
+
+<ExpressionOp> ::= '+' | '-' | '*' | '/' | '%'
+
+<If> ::= 'if' '(' <Condition> ')' '{' [<Sentences>] '}' [<ElseBlock>]
+<ElseBlock> ::= 'elseif' <If> | 'else' '{' [<Sentences>] '}'
+
+<While> ::= 'while' '(' <Condition> ')' '{' [<Sentences>] '}'
+<For> ::= 'for' '(' [<Assignment>] ';' <Condition> ';' [<Assignment>] ')' '{' [<Sentences>] '}'
+
+<Condition> ::= <Expression> <LogicalOp> <Expression> | <Condition> '&&' <Condition> | <Condition> '||' Condition | '(' <Condition> ')' | <Boolean> | <FunctionCall>
+<LogicalOp> ::= '==' | '!=' | '<=' | '=>' | '<' | '>'
+
+<FunctionCall> ::= <Variable> '(' [<FnParameters>] ')'
+
+<FnParameters> ::= [<FnParameters> ','] <FnParameter>
+<FnParameter> ::= <Expression> | <String>
+
+<ManAttribute>::= 'man.' <Variable>
+<ManAction> ::= 'man->' <Variable> [<ManParams>]['+' 'man->' <Variable> [<ManParams>]]
+<ManParams> ::= <String> | <Variable>
+
+<FileName> ::= <Variable>
+<Variable> ::= <Letter> [<String>]
+<Letter> ::= 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' | 'Z' | 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'i' | 'j' | 'k' | 'l' | 'm' | 'n' | 'o' | 'p' | 'q' | 'r' | 's' | 't' | 'u' | 'v' | 'w' | 'x' | 'y' | 'z'
+<Boolean> ::= 'true' | 'false'
+<Integer> ::= <Digit> [<Integer>]
+<Digit> ::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
+<String> ::= <String> [<Character>]
+<Character> ::= <Letter> | <Digit>
+<StringExtended> ::= <String> | <Symbol> | <Symbol> <String>
+<Symbol> ::= '|' | ' ' | '-' | '!' | '#' | '$' | '%' | '&' | '(' | ')' | '*' | '+' | ',' | '-' | '.' | '/' | ':' | ';' | '>' | '=' | '<' | '?' | '@' | '[' | '\' | ']' | '^' | '_' | '`' | '{' | '}' | '~'
+
+
