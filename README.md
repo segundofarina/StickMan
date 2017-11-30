@@ -23,7 +23,6 @@ Type | Declaration | Declaration and initialization
 `int` | `int varName;` | `int varName = 1`
 `string` | `string varName;` | `string varName = "text"`
 `boolean` | `boolean varName;` | `boolean varName = true`
-`stickman` | `stickman varName;` | -
 
 ### Comments
 There are multiline comments, they must be surrounded by `/* Comment */`
@@ -122,7 +121,7 @@ func add( int a, int b ) -> int {
 There is a basic set of movements included in every stickman code. If you need more you are free to create them and include them.
 To include an external library of movements you need to add a the following code before the `start` function.
 ```
-Movements addedMovements = include yourFile.stLib
+include yourFile.stLib
 
 start {
 	some code
