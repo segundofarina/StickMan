@@ -1,8 +1,9 @@
 %{
-  #include "y.tab.h"
   #include <stdio.h>
   #include <stdlib.h>
   #include <string.h>
+  #include "syntaxTree/syntaxTree.h"
+  #include "y.tab.h"
   extern yy_size_t yyleng;
 %}
 
@@ -37,7 +38,6 @@
 "."							{ return DOT; }
 "man"						{ return MAN; }
 "int"						{ return INTEGER_TYPE; }
-"Movements"					{ return MOVEMENTS_TYPE; }
 "string"					{ return STRING_TYPE; }
 "boolean"					{ return BOOLEAN_TYPE; }
 "return"					{ return RETURN; }
@@ -46,16 +46,30 @@
 "while"						{ return WHILE;}
 "if"						{ return IF;}
 "else"						{ return ELSE;}
-"true"|"false"				{ return BOOLEAN; }
+"true"|"false"				{ if(strcmp("true",yytext)) {
+									yylval.integer = 1;
+								} else {
+									yylval.integer = 0;
+								}
+								return BOOLEAN; }
+
 "func"						{ return FUNCTION; }
-[0-9]+						{ yylval.integer = atoi(yytext) ; return INTEGER; }
+
+[0-9]+						{ yylval.integer = atoi(yytext);
+								return INTEGER; }
+
 [a-zA-Z]([a-zA-Z0-9_])*		{ 	yylval.string = malloc(yyleng+1);
 								strcpy(yylval.string,yytext);
 								return VARIABLE; }
+
 \"[^\"]*\"					{ 	yylval.string = malloc(yyleng+1);
 								strcpy(yylval.string,yytext);
 								return STRING; }
-[a-zA-Z]([a-zA-Z0-9_])*."stickLib"		{ return FILE_NAME; }
+
+[a-zA-Z]([a-zA-Z0-9_])*."stickLib"		{ yylval.string = malloc(yyleng+1);
+											strcpy(yylval.string,yytext);
+											return FILE_NAME; }
+
 \/\*([^\*\/])*\*\/			;
 [ \t]						;
 

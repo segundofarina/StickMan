@@ -1,48 +1,4 @@
 include yourFile.stickLib
-include yourFile.stickLib
-
-start {
-	int a = 5 + 2 + b;
-
-	a = 2;
-	return a;
-
-	if(true || 1 == 2) {
-		a = 5;
-	}
-
-	while(true) {
-		int a = 0;
-	}
-
-	for(a = 0; a < 2; a = a+1) {
-		a += 0;
-		a++;
-		a--;
-	}
-
-	say("hola");
-
-	int a = say("hola");
-
-	if(isPar()) {
-
-	}
-
-	man.direction = left;
-	if(man.direction == left) {
-	}
-
-	man->moveLeft;
-	man->moveLeft + man->jump;
-}
-
-func say(string hola) -> int {
-
-}
-
-
-
 
 start {
 	int repetitions = 0;

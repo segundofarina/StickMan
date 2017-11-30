@@ -8,6 +8,8 @@ void startNodeFn(void * node);
 
 void headersNodeFn(void * node);
 
+void headerNodeFn(void * node);
+
 void functionsNodeFn(void * node);
 
 void startFnNodeFn(void * node);
@@ -59,5 +61,7 @@ void manAttributeNodeFn(void * node);
 void assignmentOpNodeFn(void * node);
 
 void incOpNodeFn(void * node);
+
+void logicalOpFn(void * node);
 
 #endif

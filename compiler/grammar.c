@@ -28,7 +28,7 @@ struct parameter * transform(char * parameters){
 		name[j] = parameters[i];
 		j++;
 		i++;
-	} 
+	}
 
 	if(parameters[i]==' '){
 		i++;
@@ -36,10 +36,10 @@ struct parameter * transform(char * parameters){
 
 	name[j] = 0;
 	parameter->name = malloc(strlen(name));
-	
+
 	parameter->next = transform(parameters+i);
 	strcpy(parameter->name,name);
-	
+
 	return parameter;
 }
 
@@ -278,7 +278,7 @@ void testFunctions(){
 	printf("%d\n", existsFunction(name,returnType,parameters));
 	addFunction(name,returnType,parameters);
 	printf("%d\n", existsFunction(name,returnType,parameters));
-	
+
 	printf("%d\n", existsFunction(name2,returnType2,parameters2));
 	addFunction(name2,returnType2,parameters2);
 	printf("%d\n", existsFunction(name2,returnType2,parameters2));
@@ -290,6 +290,3 @@ int main(){
 	testFunctions();
 	return 0;
 }
-
-
-
