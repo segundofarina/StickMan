@@ -1,8 +1,9 @@
 %{
-  #include "y.tab.h"
   #include <stdio.h>
   #include <stdlib.h>
   #include <string.h>
+  #include "syntaxTree/syntaxTree.h"
+  #include "y.tab.h"
   extern yy_size_t yyleng;
 %}
 

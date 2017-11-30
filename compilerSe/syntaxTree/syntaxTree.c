@@ -2,6 +2,7 @@
 #include <string.h>
 #include "syntaxTree.h"
 
+#include <stdio.h>
 
 startNode * createStartNode(headersNode * headers, functionsNode * functions) {
 	startNode * node = malloc(sizeof(startNode));
@@ -34,6 +35,16 @@ headersNode * addToHeadersNode(headerNode * header, headersNode * pNode) {
 	return pNode;
 }
 
+headerNode * createHeaderNode(char * fileName) {
+	headerNode * node = malloc(sizeof(headerNode));
+	if(fileName != NULL) {
+		node->fileName = malloc(strlen(fileName)+1);
+		strcpy(node->fileName, fileName);
+	}
+	node->runCode = headerNodeFn;
+	return node;
+}
+
 functionsNode * createFunctionsNode(void * fn, typeFunction typeFn) {
 	functionsNode * node = malloc(sizeof(functionsNode));
 	functionList * list = malloc(sizeof(functionList));
@@ -61,7 +72,7 @@ functionsNode * addToFunctionsNode(void * fn, functionsNode * pNode, typeFunctio
 startFnNode * createStartFnNode(sentencesNode * sentences) {
 	startFnNode * node = malloc(sizeof(startFnNode));
 	node->sentences = sentences;
-	node->functionType = START_FN;
+	node->functionType = ST_START_FN;
 	node->runCode = startFnNodeFn;
 	return node;
 }
@@ -71,10 +82,12 @@ functionNode * createFunctionNode(parametersNode * parameters, returnTypeNode * 
 	node->parameters = parameters;
 	node->returnType = returnType;
 	node->sentences = sentences;
-	node->functionType = FUNCTION;
+	node->functionType = ST_FUNCTION;
 
-	node->name = malloc(strlen(name)+1);
-	strcpy(node->name, name);
+	if(name != NULL) {
+		node->name = malloc(strlen(name)+1);
+		strcpy(node->name, name);
+	}
 
 	node->runCode = functionNodeFn;
 	return node;
@@ -119,8 +132,10 @@ parametersNode * addToParametersNode(parameterNode * parameter, parametersNode *
 
 parameterNode * createParameterNode(typeNode * type, char * name) {
 	parameterNode * node = malloc(sizeof(parameterNode));
-	node->name = malloc(strlen(name)+1);
-	strcpy(node->name, name);
+	if(name != NULL) {
+		node->name = malloc(strlen(name)+1);
+		strcpy(node->name, name);
+	}
 	node->type = type;
 	node->runCode = parameterNodeFn;
 	return node;
@@ -157,11 +172,19 @@ sentenceNode * createSentenceNode(void * sentence, typeSentence type) {
 	return node;
 }
 
-manActionNode * createManActionNode(typeManAction type, manParamNode * manParam1, manParamNode * manParam2){
+manActionNode * createManActionNode(typeManAction type, char * var1, manParamNode * manParam1, char * var2, manParamNode * manParam2){
 	manActionNode * node = malloc(sizeof(manActionNode));
 	node->manActionType = type;
 	node->manParam1 = manParam1;
 	node->manParam2 = manParam2;
+	if(var1 != NULL) {
+		node->var1 = malloc(strlen(var1)+1);
+		strcpy(node->var1, var1);
+	}
+	if(var2 != NULL) {
+		node->var2 = malloc(strlen(var2)+1);
+		strcpy(node->var2, var2);
+	}
 	node->runCode = manActionNodeFn;
 	return node;
 }
@@ -169,15 +192,21 @@ manActionNode * createManActionNode(typeManAction type, manParamNode * manParam1
 manParamNode * createManParamNode(char * string) {
 	//si es un string esta con "", sino es una vaiable
 	manParamNode * node = malloc(sizeof(manParamNode));
-	node->param = malloc(strlen(string)+1);
-	strcpy(node->param, string);
+	if(string != NULL) {
+		node->param = malloc(strlen(string)+1);
+		strcpy(node->param, string);
+	}
 	node->runCode = manParamNodeFn;
 	return node;
 }
 
-functionCallNode * createFunctionCallNode(typeSentence sentenceType, fnParametersNode * fnParameters){
+functionCallNode * createFunctionCallNode(char * name, fnParametersNode * fnParameters){
 	functionCallNode * node = malloc(sizeof(functionCallNode));
-	node->sentenceType = sentenceType;
+	if(name != NULL) {
+		node->name = malloc(strlen(name)+1);
+		strcpy(node->name, name);
+	}
+	node->sentenceType = ST_FUNCTION_CALL;
 	node->fnParameters = fnParameters;
 	node->runCode = fnFunctionCallFn;
 	return node;
@@ -210,8 +239,10 @@ fnParametersNode * addToFnParametersNode(fnParameterNode * fnParameter, fnParame
 fnParameterNode * createFnParameterNode(typeParameter paramType, expressionNode * expression, char * str){
 	fnParameterNode * node = malloc(sizeof(fnParameterNode));
 	node->paramType = paramType;
-	node->str = malloc(strlen(str)+1);
-	strcpy(node->str, str);
+	if(str != NULL) {
+		node->str = malloc(strlen(str)+1);
+		strcpy(node->str, str);
+	}
 	node->expression = expression;
 	node->runCode = fnParameterNodeFn;
 	return node;
@@ -221,8 +252,10 @@ expressionNode * createExpressionNode(typeExpression expType, int value, char * 
 	expressionNode * node = malloc(sizeof(expressionNode));
 	node->expressionType = expType;
 	node->value = value;
-	node->variable = malloc(strlen(variable)+1);
-	strcpy(node->variable, variable);
+	if(variable != NULL) {
+		node->variable = malloc(strlen(variable)+1);
+		strcpy(node->variable, variable);
+	}
 	node->manAttribute = manAttribute;
 	node->functionCall = functionCall;
 	node->expression1 = expression1;
@@ -237,14 +270,15 @@ forNode * createForNode(assignmentNode * assignment1, assignmentNode * assignmen
 	node->assignment2 = assignment2;
 	node->condition = condition;
 	node->sentences = sentences;
-	node->sentenceType = FOR;
+	node->sentenceType = ST_FOR;
 	node->runCode = forNodeFn;
 	return node;
 }
 
-conditionNode * createConditionNode(typeCondition conditionType, int boolean, conditionNode * condition1, conditionNode * condition2, expressionNode * expression1, expressionNode * expression2, functionCallNode * functionCall){
+conditionNode * createConditionNode(typeCondition conditionType, logicalOperatorNode * logicalOp, int boolean, conditionNode * condition1, conditionNode * condition2, expressionNode * expression1, expressionNode * expression2, functionCallNode * functionCall){
 	conditionNode * node = malloc(sizeof(conditionNode));
 	node->conditionType = conditionType;
+	node->logicalOperator = logicalOp;
 	node->boolean = boolean;
 	node->condition1 = condition1;
 	node->condition2 = condition2;
@@ -255,11 +289,18 @@ conditionNode * createConditionNode(typeCondition conditionType, int boolean, co
 	return node;
 }
 
+logicalOperatorNode * createLogicalOpNode(typeLogicOp type) {
+	logicalOperatorNode * node = malloc(sizeof(logicalOperatorNode));
+	node->type = type;
+	node->runCode = logicalOpFn;
+	return node;
+}
+
 whileNode * createWhileNode(conditionNode * condition, sentencesNode * sentences){
 	whileNode * node = malloc(sizeof(whileNode));
 	node->condition = condition;
 	node->sentences = sentences;
-	node->sentenceType = WHILE;
+	node->sentenceType = ST_WHILE;
 	node->runCode = whileNodeFn;
 	return node;
 }
@@ -268,34 +309,38 @@ returnNode * createReturnNode(typeReturn retType, int boolean, expressionNode * 
 	returnNode * node = malloc(sizeof(returnNode));
 	node->returnType = retType;
 	node->boolean = boolean;
-	node->sentenceType = RETURN;
+	node->sentenceType = ST_RETURN;
 	node->expression = expression;
 	node->runCode = returnNodeFn;
 	return node;
 }
 
-declarationNode * createDeclarationNode(typeDeclaration declarationType, typeNode * type, expressionNode * expression){
+declarationNode * createDeclarationNode(typeDeclaration declarationType, typeNode * type, expressionNode * expression, char * variable){
 	declarationNode * node = malloc(sizeof(declarationNode));
 	node->declarationType = declarationType;
 	node->type = type;
 	node->expression = expression;
-	node->sentenceType = DECLARATION;
+	node->sentenceType = ST_DECLARATION;
+	if(variable != NULL) {
+		node->variable = malloc(strlen(variable)+1);
+		strcpy(node->variable, variable);
+	}
 	node->runCode = declarationNodeFn;
 	return node;
 }
 
-ifNode * createIfNode( conditionNode * condition, sentencesNode * sentences, struct elseBlockNode * elseBlock){
+ifNode * createIfNode( conditionNode * condition, sentencesNode * sentences, elseBlockNode * elseBlock){
 	ifNode * node = malloc(sizeof(ifNode));
 	node->condition = condition;
 	node->sentences = sentences;
 	node->elseBlock = elseBlock;
-	node->sentenceType = IF;
+	node->sentenceType = ST_IF;
 	node->runCode = ifNodeFn;
 	return node;
 }
 
-struct elseBlockNode * createElseBlockNode(typeElseBlock typeElse, ifNode * elseif, sentencesNode * sentences) {
-	struct elseBlockNode * node = malloc(sizeof(struct elseBlockNode));
+elseBlockNode * createElseBlockNode(typeElseBlock typeElse, ifNode * elseif, sentencesNode * sentences) {
+	elseBlockNode * node = malloc(sizeof(elseBlockNode));
 	node->type = typeElse;
 	node->elseif = elseif;
 	node->sentences = sentences;
@@ -303,22 +348,28 @@ struct elseBlockNode * createElseBlockNode(typeElseBlock typeElse, ifNode * else
 	return node;
 }
 
-assignmentNode * createAssignmentNode(typeAssigment assigmentType, assignmentOpNode * assignmentOp, expressionNode * expression, incOpNode * incOp, manAttributeNode * manAttribute){
+assignmentNode * createAssignmentNode(typeAssigment assigmentType, assignmentOpNode * assignmentOp, expressionNode * expression, incOpNode * incOp, manAttributeNode * manAttribute, char * variable){
 	assignmentNode * node = malloc(sizeof(assignmentNode));
 	node->assignmentType = assigmentType;
 	node->assignmentOp = assignmentOp;
 	node->expression = expression;
 	node->incOp = incOp;
 	node->manAttribute = manAttribute;
-	node->sentenceType = ASSIGNMENT;
+	node->sentenceType = ST_ASSIGNMENT;
+	if(variable != NULL) {
+		node->variable = malloc(strlen(variable)+1);
+		strcpy(node->variable, variable);
+	}
 	node->runCode = assignmentNodeFn;
 	return node;
 }
 
 manAttributeNode * createManAttributeNode(char * variable) {
 	manAttributeNode * node = malloc(sizeof(manAttributeNode));
-	node->variable = malloc(strlen(variable)+1);
-	strcpy(node->variable, variable);
+	if(variable != NULL) {
+		node->variable = malloc(strlen(variable)+1);
+		strcpy(node->variable, variable);
+	}
 	node->runCode = manAttributeNodeFn;
 	return node;
 }
@@ -336,9 +387,9 @@ incOpNode * createIncOpNode(typeIncrementOp operator) {
 	node->runCode = incOpNodeFn;
 	return node;
 }
-
+/*
 int main() {
-	/*
+
 	sentenceNode * sentence = createSentenceNode();
 	sentencesNode * sentences = createSentencesNode(sentence);
 	typeNode * type = createTypeNode(INTEGER_TYPE);
@@ -347,6 +398,7 @@ int main() {
 	functionsNode * functions = createFunctionsNode(function);
 
 	(functions->runCode)(functions);
-*/
+
 	return 0;
 }
+*/
