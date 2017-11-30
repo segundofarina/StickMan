@@ -10,8 +10,8 @@
 action *actions;
 int actionsLen = 0;
 
-int position = 0;
-int direction = FRONT;
+int manPosition = 0;
+direction manDirection = FRONT;
 
 int lineno = 0;
 
@@ -33,47 +33,60 @@ int isVariable(char *string)
 	return (1);
 }
 
-void printMovement(char movement[ACTION_LENGTH][FRAME_HEIGHT][FRAME_WIDTH], int position, int direction)
+char *getSpaces(int position)
 {
-	int i, j, k, l;
-	int offset = FRAME_WIDTH * (SCREEN_SPACES - position);
-	if (position > SCREEN_SPACES)
-	{
-		printf("Inavlid postion\n");
-		return;
-	}
-
+	int k;
 	char *spaces = malloc(position * FRAME_WIDTH + 1);
 	for (k = 0; k < position * FRAME_WIDTH; k++)
 	{
 		spaces[k] = ' ';
 	}
 	spaces[k] = 0;
+	return spaces;
+}
+
+char *editSpaces(char *spaces, direction dir, int position, int it)
+{
+	if (dir == RIGHT)
+	{
+		if (it % 2)
+		{
+			strcat(spaces, "  ");
+		}
+		else
+		{
+			strcat(spaces, " ");
+		}
+	}
+	else if (dir == LEFT && position != 0)
+	{
+		if (it % 2)
+		{
+			spaces += 1;
+		}
+		else
+		{
+			spaces += 2;
+		}
+	}
+	return spaces;
+}
+
+void printMovement(char movement[ACTION_LENGTH][FRAME_HEIGHT][FRAME_WIDTH], int position, direction dir)
+{
+	int i, j, k, l;
+	char * spaces;
+
+	if (position > SCREEN_SPACES)
+	{
+		printf("Inavlid postion\n");
+		return;
+	}
+	spaces = getSpaces(position);
 
 	for (i = 0; i < ACTION_LENGTH; i++)
 	{
-		if (direction == RIGHT)
-		{
-			if (i % 2)
-			{
-				strcat(spaces, "  ");
-			}
-			else
-			{
-				strcat(spaces, " ");
-			}
-		}
-		else if (direction == LEFT && position != 0)
-		{
-			if (i % 2)
-			{
-				spaces += 1;
-			}
-			else
-			{
-				spaces += 2;
-			}
-		}
+		spaces = editSpaces(spaces, dir,position, i);
 		for (j = 0; j < FRAME_HEIGHT; j++)
 		{
 
@@ -87,6 +100,8 @@ void printMovement(char movement[ACTION_LENGTH][FRAME_HEIGHT][FRAME_WIDTH], int 
 		sleep_ms(SLEEP_MS);
 		system("clear");
 	}
+	
+	
 }
 
 int getNextLine(FILE *fp, char **var)
@@ -116,7 +131,7 @@ int fillHeader(FILE *fp, action *a)
 	ans = getNextLine(fp, &var);
 	if (strcmp(var, "") == 0)
 	{
-		printf("There is no header for action\n");
+		printf("line %d: There is no header for action\n",lineno);
 		return ERROR;
 	}
 	strtok_r(var, "[", &attr);
@@ -128,7 +143,7 @@ int fillHeader(FILE *fp, action *a)
 	}
 	else
 	{
-		printf("Not a valid name for library input: %s . \n", var);
+		printf("line %d: Not a valid name for library input: %s . \n", lineno, var);
 		return ERROR;
 	}
 
@@ -146,7 +161,7 @@ int fillHeader(FILE *fp, action *a)
 	}
 	else
 	{
-		printf("Not a valid attrbute for library input: %s in line %d\n", attr, lineno);
+		printf("line %d: Not a valid attrbute for library input: %s\n", lineno, attr);
 		return ERROR;
 	}
 	return ans;
@@ -188,6 +203,7 @@ int openActions(char *fileRoute)
 	int ans, quantity, i;
 	char *buffer;
 	FILE *fp = fopen(fileRoute, "r");
+	lineno = 0;
 	if (fp == NULL)
 	{
 		printf("not a valid route\n");
@@ -198,7 +214,7 @@ int openActions(char *fileRoute)
 	quantity = atoi(buffer);
 	if (quantity == 0)
 	{
-		printf("First line must be a number indicating the number of actions expected a number but recieved %s\n", buffer);
+		printf("line %d: First line must be a number indicating the number of actions expected a number but recieved %s\n", lineno, buffer);
 		return ERROR;
 	}
 
@@ -250,39 +266,87 @@ int existsAction(char *name, int dir)
 
 int getPosition()
 {
-	return position;
+	return manPosition;
 }
+
 int getDirection()
 {
-	return direction;
+	return manDirection;
+}
+
+void setPosition(int pos)
+{
+	manPosition = pos;
+}
+
+void setDirection(direction dir)
+{
+	manDirection = dir;
 }
 
 void movePosition(int dir)
 {
 	if (dir == RIGHT)
 	{
-		if (position < SCREEN_SPACES)
+		if (manPosition < SCREEN_SPACES)
 		{
-			position += 1;
+			manPosition += 1;
 		}
-		direction = RIGHT;
+		dir = RIGHT;
 	}
 	else if (dir == LEFT)
 	{
-		if (position > 0)
+		if (manPosition > 0)
 		{
-			position -= 1;
+			manPosition -= 1;
 		}
-		direction = LEFT;
+		manDirection = LEFT;
 	}
 	else if (dir == FRONT)
 	{
-		direction = FRONT;
+		manDirection = FRONT;
 	}
 }
 
-int executeaYield(char *string)
+
+
+void printYield(char * string, char movement[ACTION_LENGTH][FRAME_HEIGHT][FRAME_WIDTH], int position, direction dir)
 {
+	int i, j, k, l;
+	char * spaces;
+
+	if (position > SCREEN_SPACES)
+	{
+		printf("Inavlid postion\n");
+		return;
+	}
+	spaces = getSpaces(position);
+
+	for (i = 0; i < ACTION_LENGTH; i++)
+	{
+		spaces = editSpaces(spaces, dir,position, i);
+		for (j = 0; j < FRAME_HEIGHT; j++)
+		{
+
+			printf("%s", spaces);
+			if(j== 8){
+				printf("%s",string);
+			}
+			for (int k = 0; k < FRAME_WIDTH; k++)
+			{
+				printf("%c", movement[i][j][k]);
+			}
+			printf("\n");
+		}
+		sleep_ms(SLEEP_MS);
+		system("clear");
+	}
+}
+
+int executeYield(char *string)
+{	
+	int i = existsAction("stand",FRONT);
+	printYield( string, actions[i].frames, manPosition, manDirection);
 	return 1;
 }
 
@@ -291,7 +355,7 @@ int executeaction(char *name, int dir)
 	int i;
 	if ((i = existsAction(name, dir)) >= 0)
 	{
-		printMovement(actions[i].frames, position, actions[i].direction);
+		printMovement(actions[i].frames, manPosition, actions[i].direction);
 		movePosition(dir);
 		return 0;
 	}
@@ -322,6 +386,9 @@ int main(int argc, char const *argv[])
 
 	executeaction("jump", FRONT);
 	//executeaction("walk", RIGHT);
+	
+	executeYield("HOLA FLORRCI UQUE PASA SI PONGO UN STRING MUY LARGO TIP @USKKDJSJKSD HSDHJS HJSDHJSD SDJH");
+	executeYield("COMO ESTAS?");
 	printf("Press 'y' characther to print all actions\n");
 	int ans = getchar();
 	if (ans == 'y')
