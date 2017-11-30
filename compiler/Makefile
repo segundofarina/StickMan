@@ -1,7 +1,7 @@
 all:
 	$(MAKE) grammar
 	$(MAKE) lex
-	gcc -o stickman main.c y.tab.c lex.yy.c syntaxTree/*.c
+	gcc -o cstickman cstickman.c y.tab.c lex.yy.c syntaxTree/*.c helpers/*.c
 	$(MAKE) clean
 
 grammar:
@@ -13,7 +13,7 @@ lex:
 test:
 	$(MAKE) all
 
-	./stickman < ../testCodes/helloworld.stick > ../compiled/compiledCode.c
+	./cstickman < ../testCodes/helloworld.stick > ../compiled/compiledCode.c
 
 clean:
 	rm lex.yy.c y.tab.c y.tab.h
