@@ -1,0 +1,82 @@
+stand[front]
+     _
+    (")
+    o-o
+   / | \
+   \ | /
+    o-o
+    / |
+   O  O
+    \ |
+   oO O
+     _
+    (")
+    o-o
+   / | \
+   \ | /
+    o-o
+    | |
+    O O
+    | |
+   oO Oo
+o    _    
+ \  (")  
+  \ o-o 
+     | \
+     | /
+    o-o
+    | |
+    O O
+    | |
+   oO Oo
+     _    o
+    (")  /
+    o-o /
+   / | 
+   \ | 
+    o-o
+    | |
+    O O
+    | |
+   oO Oo
+jump [front]
+
+     _
+    (")
+    o-o
+   / | \
+   \ | /
+   _o-o_
+  o     o
+   \   /
+  oO   Oo
+o    _    o
+ \  (")  /
+  \ o-o /
+     | 
+     | 
+    o-o
+    | |
+    O O
+    | |
+   oO Oo
+     _
+    (")
+ .--o-o--.
+ |   |   |
+ o   |   o
+    o-o
+    | |
+    o o
+    | |
+   oO Oo
+     _
+    (")
+ .--o-o--.
+ |   |   |
+ o   |   o
+    o-o
+    | |
+    o o
+    | |
+   oO Oo
