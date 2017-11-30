@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "syntaxTree.h"
+#include "../helpers/declarations.h"
 
 #include <stdio.h>
 
@@ -77,6 +78,27 @@ startFnNode * createStartFnNode(sentencesNode * sentences) {
 	return node;
 }
 
+VarList * getParameters(parametersNode * parameters) {
+	VarList * paramList = NULL;
+
+	if(parameters == NULL) {
+		return NULL;
+	}
+
+	parameterList * current = parameters->list;
+	while(current != NULL) {
+		parameterNode * parameter = current->parameter;
+		paramList = addToParamList(createParameter(parameter->type->type, parameter->name), paramList);
+		if(paramList == NULL) {
+			printf("Fatal Error: parameter %s has more than one declaration in the same function.\n", parameter->name);
+			return paramList;
+		}
+		current = current->next;
+	}
+
+	return paramList;
+}
+
 functionNode * createFunctionNode(parametersNode * parameters, returnTypeNode * returnType, sentencesNode * sentences, char * name) {
 	functionNode * node = malloc(sizeof(functionNode));
 	node->parameters = parameters;
@@ -90,6 +112,16 @@ functionNode * createFunctionNode(parametersNode * parameters, returnTypeNode * 
 	}
 
 	node->runCode = functionNodeFn;
+
+	/* Add to functions list */
+	typeOp retType = ST_VOID_TYPE;
+	if(returnType != NULL) {
+		retType = returnType->type->type;
+	}
+	if(!createFunction(name, retType, getParameters(parameters))) {
+		printf("Fatal Error: function %s() has more than one declaration.\n", name);
+	}
+
 	return node;
 }
 

@@ -89,6 +89,8 @@ void typeNodeFn(void * node) {
 		case ST_STRING_TYPE:
 			printf("char * ");
 			break;
+		case ST_VOID_TYPE:
+			break;
 	}
 }
 
