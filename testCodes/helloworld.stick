@@ -1,15 +1,5 @@
 include yourFile.stickLib
 
-
-
-
-func say(string hola) -> int {
-
-}
-
-
-
-
 start {
 	int repetitions = 0;
 

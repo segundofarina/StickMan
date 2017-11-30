@@ -61,7 +61,6 @@
 %token INTEGER_TYPE
 %token STRING_TYPE
 %token BOOLEAN_TYPE
-%token MOVEMENTS_TYPE
 %token INCLUDE
 %token <string> FILE_NAME
 %token COLON

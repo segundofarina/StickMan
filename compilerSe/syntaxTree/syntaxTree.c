@@ -387,18 +387,3 @@ incOpNode * createIncOpNode(typeIncrementOp operator) {
 	node->runCode = incOpNodeFn;
 	return node;
 }
-/*
-int main() {
-
-	sentenceNode * sentence = createSentenceNode();
-	sentencesNode * sentences = createSentencesNode(sentence);
-	typeNode * type = createTypeNode(INTEGER_TYPE);
-	nameNode * name = createNameNode("start");
-	functionNode * function = createFunctionNode(type, name, sentences);
-	functionsNode * functions = createFunctionsNode(function);
-
-	(functions->runCode)(functions);
-
-	return 0;
-}
-*/
