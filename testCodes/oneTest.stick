@@ -1,7 +1,45 @@
-include other.sticklib
+include other.stickLib
+include lib.stickLib
 
 start {
-	int a = 2;
-	int b = 3;
-	a = a + b;
+	int times = 5;
+	while(times>0){
+		if(man.direction == right){
+			justDance();
+			man.direction = left;
+		}else{
+			workOut();
+		}
+		times--;
+	}
+	if(man.direction == right){
+		man->roll;
+		man.directon = left;
+		man->roll;
+	}else{
+		man->roll;
+	}
+	man->yield "I'll be back";
 }
+
+func keepSpinning(int spin){
+	while(spin > 0){
+		man->goesArroundComesArround;
+		spin--;
+	}
+}
+
+func justDance(){
+	int spin = 5;
+	man->walk;
+	keepSpinning(spin);
+	man->jump;
+}
+
+func workOut(){
+	man->weightLifting;
+	man.direction = left;
+	man->walk;
+	man->weightLifting;
+}
+
