@@ -13,7 +13,7 @@ lex:
 test:
 	$(MAKE) all
 
-	./stickman < ../testCodes/helloworld.stick > ../compiled/compiledCode.c
+	./stickman < ../testCodes/oneTest.stick > ../compiled/compiledCode.c
 
 clean:
 	rm lex.yy.c y.tab.c y.tab.h
