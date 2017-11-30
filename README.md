@@ -51,8 +51,6 @@ The character can be controlled by excuting actions on it for making it move alo
 2. `jump` : the charachter jumps.
 3. `squat` : the character squats.
 4. `yield "some text"` : the character yields the string followed by this action.
-5. `moveLeftArm` : the character raises it´s left arm if it´s down and lowers it down if it´s up
-6. `moveRightArm` : the character raises it´s right arm if it´s down and lowers it down if it´s up
 
 The actions are exectued with an instance of stickman followed by an "->" and an action.
 ```
