@@ -47,6 +47,7 @@ typedef struct fnParameterNode {
 	typeParameter paramType;
 	char * str;
 	struct expressionNode * expression;
+	runFn runCode;
 } fnParameterNode;
 
 typedef struct fnParameterList {
@@ -96,6 +97,7 @@ typedef struct assignmentNode {
 	expressionNode * expression;
 	incOpNode * incOp;
 	manAttributeNode * manAttribute;
+	typeSentence sentenceType;
 	runFn runCode;
 } assignmentNode;
 
@@ -103,6 +105,7 @@ typedef struct declarationNode {
 	typeDeclaration declarationType;
 	typeNode * type;
 	expressionNode * expression;
+	typeSentence sentenceType;
 	runFn runCode;
 } declarationNode;
 
@@ -110,6 +113,7 @@ typedef struct returnNode {
 	typeReturn returnType;
 	int boolean;
 	expressionNode * expression;
+	typeSentence sentenceType;
 	runFn runCode;
 } returnNode;
 
@@ -117,12 +121,14 @@ typedef struct ifNode {
 	conditionNode * condition;
 	struct sentencesNode * sentences;
 	struct elseBlockNode * elseBlock;
+	typeSentence sentenceType;
 	runFn runCode;
 } ifNode;
 
 typedef struct whileNode {
 	conditionNode * condition;
 	struct sentencesNode * sentences;
+	typeSentence sentenceType;
 	runFn runCode;
 } whileNode;
 
@@ -131,11 +137,13 @@ typedef struct forNode {
 	assignmentNode * assignment2;
 	conditionNode * condition;
 	struct sentencesNode * sentences;
+	typeSentence sentenceType;
 	runFn runCode;
 } forNode;
 
 typedef struct functionCallNode {
 	fnParametersNode * fnParameters;
+	typeSentence sentenceType;
 	runFn runCode;
 } functionCallNode;
 
@@ -148,6 +156,7 @@ typedef struct manActionNode {
 	typeManAction manActionType;
 	manParamNode * manParam1;
 	manParamNode * manParam2;
+	typeSentence sentenceType;
 	runFn runCode;
 } manActionNode;
 
@@ -197,11 +206,13 @@ typedef struct functionNode {
 	returnTypeNode * returnType;
 	sentencesNode * sentences;
 	char * name;
+	typeFunction functionType;
 	runFn runCode;
 } functionNode;
 
 typedef struct startFnNode {
 	sentencesNode * sentences;
+	typeFunction functionType;
 	runFn runCode;
 } startFnNode;
 
