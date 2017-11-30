@@ -3,35 +3,27 @@
 #include <string.h>
 #include "grammar.h"
 
-static int_var integer_variables[VARIABLES_QUANTITY];
-static string_var string_variables[VARIABLES_QUANTITY];
-static boolean_var boolean_variables[VARIABLES_QUANTITY];
-static functions functions_variables[VARIABLES_QUANTITY];
 static char * movements_files[FILES_QUANTITY];
+static function functions_variables[VARIABLES_QUANTITY];
 
-static int integer_variables_length = 0;
-static int string_variables_length = 0;
-static int boolean_variables_length = 0;
+static int movements_files_length = 0;
 static int functions_variables_length = 0;
-static int movements_files_lenght = 0;
 
-
-
-
+static function * currentfn;
 
 
 struct parameter * transform(char * parameters){
 
 	int i=0, j=0;
-	char name[MAX_FUNCTION_NAME];
+	char name[MAX_FUNCTION_NAME], type[MAX_RETURN_TYPE];
 	struct parameter * parameter = malloc(sizeof(struct parameter));
 
-	if(parameters[i] == 0){
+	if(!parameters[i]){
 		return NULL;
 	}
 
-	while(parameters[i] != ' ' && parameters[i] != 0 ){
-		name[j] = parameters[i];
+	while(parameters[i] != ' '&& parameters[i] != 0 ){
+		type[j] = parameters[i];
 		j++;
 		i++;
 	}
@@ -40,11 +32,28 @@ struct parameter * transform(char * parameters){
 		i++;
 	}
 
+	type[j] = 0;
+	parameter->type = malloc(strlen(type));
+	strcpy(parameter->type,type);
+
+	j = 0;
+
+	while(parameters[i] != ',' && parameters[i] != 0 ){
+		name[j] = parameters[i];
+		j++;
+		i++;
+	}
+
+	if(parameters[i]==','){
+		i++;
+	}
+
 	name[j] = 0;
 	parameter->name = malloc(strlen(name));
+	strcpy(parameter->name,name);
 
 	parameter->next = transform(parameters+i);
-	strcpy(parameter->name,name);
+	
 
 	return parameter;
 }
@@ -71,76 +80,8 @@ int existsFunction(char * name, char * returnType, char * parameters){
 
 
 
-int existsInt(char * name){
-	for(int i=0; i< integer_variables_length ; i++){
-		if(strcmp(integer_variables[i].name,name) == 0){
-			return 1;
-		}
-	}
-	return 0;
-}
 
-int existsString(char * name){
-	for(int i=0; i< string_variables_length ; i++){
-		if(strcmp(string_variables[i].name,name) == 0){
-			return 1;
-		}
-	}
-	return 0;
-}
-
-int existsBoolean(char * name){
-	for(int i=0; i< boolean_variables_length ; i++){
-		if(strcmp(boolean_variables[i].name,name) == 0){
-			return 1;
-		}
-	}
-	return 0;
-}
-
-int existsVariable(char * name){
-	if(existsInt(name) || existsBoolean(name) || existsString(name)){
-		return 1;
-	}
-	return 0;
-}
-
-int existsFile(char * name){
-	for(int i=0 ; i < movements_files_lenght ; i++){
-		if(!strcmp(movements_files[i],name)){
-			return 1;
-		}
-	}
-	return 0;
-}
-
-void addInt(char * name, int value){
-	int_var * aux = malloc( sizeof(int_var) );
-	aux->name = name;
-	aux->value = value;
-	integer_variables[integer_variables_length] = (*aux);
-	integer_variables_length++;
-}
-
-void addBoolean(char * name, int value){
-	if(value == 0 || value == 1){
-		boolean_var * aux = malloc( sizeof(boolean_var) );
-		aux->name = name;
-		aux->value = value;
-		boolean_variables[boolean_variables_length] = (*aux);
-		boolean_variables_length++;
-	}
-}
-
-void addString(char * name, char * value){
-	string_var * aux = malloc( sizeof(string_var) );
-	aux->name = name;
-	aux->value = value;
-	string_variables[string_variables_length] = (*aux);
-	string_variables_length++;
-}
-
-void addFunction(char * name, char * returnType, char * parameters){
+function * addFunction(char * name, char * returnType, char * parameters){
 	if(!existsFunction(name,returnType,parameters)){
 		struct parameter * parameter = transform(parameters);
 		struct function * function = malloc(sizeof(function));
@@ -149,173 +90,151 @@ void addFunction(char * name, char * returnType, char * parameters){
 		function->parameters = parameter;
 		functions_variables[functions_variables_length] = (*function);
 		functions_variables_length++;
+
+		function->integer_variables_length = 0;
+		function->string_variables_length = 0;
+	 	function->boolean_variables_length = 0;
+		return function;
 	}
+	return NULL;
 }
 
-void addFile(char * name){
- if(!existsFile(name)){
- 	movements_files[movements_files_lenght] = name;
- 	movements_files_lenght++;
- }
+void currentFunction(char * name, char * returnType, char * parameters){
+	currentfn = addFunction(name,returnType,parameters);
 }
 
-void updateInt(char * name, int value){
-	for(int i=0; i< integer_variables_length ; i++){
-		if(strcmp(integer_variables[i].name,name) == 0){
-			integer_variables[i].value = value;
-			return;
+int existsInt(char * name){
+	if(!currentfn->integer_variables_length){
+		return 0;
+	}
+	for(int i=0; i < currentfn->integer_variables_length ; i++){
+		if(!strcmp(currentfn->integer_variables[i].name,name)){
+			return 1;
 		}
 	}
-	printf("variable undeclared\n");
+	return 0;
 }
 
-void updateBoolean(char * name, int value){
+int existsString(char * name){
+	if(!currentfn->string_variables_length){
+		return 0;
+	}
+	for(int i=0; i< currentfn->string_variables_length ; i++){
+		if(!strcmp(currentfn->string_variables[i].name,name)){
+			return 1;
+		}
+	}
+	return 0;
+}
+
+int existsBoolean(char * name){
+	if(!currentfn->boolean_variables_length){
+		return 0;
+	}
+	for(int i=0; i< currentfn->boolean_variables_length ; i++){
+		if(!strcmp(currentfn->boolean_variables[i].name,name)){
+			return 1;
+		}
+	}
+	return 0;
+}
+
+int existsFile(char * name){
+	for(int i=0 ; i < movements_files_length ; i++){
+		if(!strcmp(movements_files[i],name)){
+			return 1;
+		}
+	}
+	return 0;
+}
+
+int addInt(char * name, int value){
+	if(existsInt(name)){
+		return 1;
+	}
+	int_var * aux = malloc( sizeof(int_var));
+	aux->name = name;
+	aux->value = value;
+	currentfn->integer_variables[currentfn->integer_variables_length] = (*aux);
+	currentfn->integer_variables_length++;
+	return 0;
+}
+
+int addBoolean(char * name, int value){
+	if(!existsBoolean(name) && (value == 0 || value == 1)){
+		boolean_var * aux = malloc( sizeof(boolean_var) );
+		aux->name = name;
+		aux->value = value;
+		currentfn->boolean_variables[currentfn->boolean_variables_length] = (*aux);
+		currentfn->boolean_variables_length++;
+		return 0;
+	}
+	return 1;
+}
+
+int addString(char * name, char * value){
+	if(existsString(name)){
+		return 1;
+	}
+	string_var * aux = malloc( sizeof(string_var) );
+	aux->name = name;
+	aux->value = value;
+	currentfn->string_variables[currentfn->string_variables_length] = (*aux);
+	currentfn->string_variables_length++;
+	return 0;
+}
+
+
+
+int addFile(char * name){
+ if(!existsFile(name)){
+ 	movements_files[movements_files_length] = name;
+ 	movements_files_length++;
+ 	return 0;
+ }
+ return 1;
+}
+
+int updateInt(char * name, int value){
+	if(!existsInt(name)){
+		return 1;
+	}
+	for(int i=0; i< currentfn->integer_variables_length ; i++){
+		if(!strcmp(currentfn->integer_variables[i].name,name)){
+			currentfn->integer_variables[i].value = value;
+			return 0;
+		}
+	}
+	return 1;
+}
+
+int updateBoolean(char * name, int value){
+	if(!existsBoolean(name)){
+		return 1;
+	}
 	if(value == 0 || value == 1){
-		for(int i=0; i< boolean_variables_length ; i++){
-			if(strcmp(boolean_variables[i].name,name) == 0){
-				boolean_variables[i].value = value;
-				return;
+		for(int i=0; i< currentfn->boolean_variables_length ; i++){
+			if(!strcmp(currentfn->boolean_variables[i].name,name)){
+				currentfn->boolean_variables[i].value = value;
+				return 0;
 			}
 		}
-		printf("variable undeclared\n");
-	}else{
-		printf("not a boolean value\n");
 	}
+	return 1;
 }
 
-void updateString(char * name, char * value){
-	for(int i=0; i< string_variables_length ; i++){
-		if(strcmp(string_variables[i].name,name) == 0){
-			string_variables[i].value = value;
-			return;
+int updateString(char * name, char * value){
+	if(!existsString(name)){
+		return 1;
+	}
+	for(int i=0; i< currentfn->string_variables_length ; i++){
+		if(!strcmp(currentfn->string_variables[i].name,name)){
+			currentfn->string_variables[i].value = value;
+			return 0;
 		}
 	}
-	printf("variable undeclared\n");
+	return 1;
 }
-
-int getInt(char * name){
-	for(int i=0; i< integer_variables_length ; i++){
-		if(strcmp(integer_variables[i].name,name) == 0){
-			return integer_variables[i].value;
-		}
-	}
-	return 0;
-}
-
-int getBoolean(char * name){
-	for(int i=0; i< boolean_variables_length ; i++){
-		if(strcmp(boolean_variables[i].name,name) == 0){
-			return boolean_variables[i].value;
-		}
-	}
-	return 0;
-}
-
-char * getString( char * name){
-	for(int i=0; i< string_variables_length ; i++){
-		if(strcmp(string_variables[i].name,name) == 0){
-			return string_variables[i].value;
-		}
-	}
-	return 0;
-}
-
-
-void testString(){
-
-	printf("TEST STRING\n");
-
-	printf("%d\n", existsString("florcilove"));
-
-	addString("florcilove","FLORCI<3");
-	printf("%d\n", existsString("florcilove"));
-	printf("%s\n", getString("florcilove"));
-
-	updateString("florcilove","FLORCI");
-	printf("%s\n", getString("florcilove"));
-
-	addString("tincho","TINCHITO");
-	printf("%s\n", getString("tincho"));
-
-	updateString("tincho","TINCHO QUIERO COMER CLUB DE LA MILANESA");
-	printf("%s\n", getString("tincho"));
-
-	printf("%d\n", existsString("tincho"));
-	return;
-}
-
-void testInteger(){
-	printf("TEST INTEGER\n");
-
-	printf("%d\n", existsInt("florcilove"));
-
-	addInt("florcilove",0);
-	printf("%d\n", existsInt("florcilove"));
-	printf("%d\n", getInt("florcilove"));
-
-	updateInt("florcilove",1);
-	printf("%d\n", getInt("florcilove"));
-
-	addInt("tincho",4);
-	printf("%d\n", getInt("tincho"));
-
-	updateInt("tincho",5);
-	printf("%d\n", getInt("tincho"));
-
-	printf("%d\n", existsInt("tincho"));
-	return;
-}
-
-void testBoolean(){
-	printf("TEST BOOLEAN\n");
-
-	printf("%d\n", existsBoolean("florcilove"));
-
-	addInt("florcilove",0);
-	printf("%d\n", existsBoolean("florcilove"));
-	printf("%d\n", getBoolean("florcilove"));
-
-	updateInt("florcilove",1);
-	printf("%d\n", getBoolean("florcilove"));
-
-	addInt("tincho",4);
-	printf("%d\n", getBoolean("tincho"));
-
-	updateInt("tincho",1);
-	printf("%d\n", getBoolean("tincho"));
-
-	printf("%d\n", existsBoolean("tincho"));
-	return;
-}
-
-void testFunctions(){
-	char name[] = "main";
-	char returnType[] = "int";
-	char parameters[] = "int int";
-
-	char name2[] = "start";
-	char returnType2[] = "int";
-	char parameters2[] = "string int";
-
-	printf("%d\n", existsFunction(name,returnType,parameters));
-	addFunction(name,returnType,parameters);
-	printf("%d\n", existsFunction(name,returnType,parameters));
-
-	printf("%d\n", existsFunction(name2,returnType2,parameters2));
-	addFunction(name2,returnType2,parameters2);
-	printf("%d\n", existsFunction(name2,returnType2,parameters2));
-	return;
-}
-
-void testFiles(){
-	char name[] = "HOLAHOLA";
-	char name2[] = "blahblah";
-	printf("%d\n", existsFile("HOLAHOLA"));
-	addFile("HOLAHOLA");
-	printf("%d\n", existsFile("blahblah"));
-	addFile("blahblah");
-	printf("%d\n", existsFile("blahblah"));
- }
 
 
 int main(){
