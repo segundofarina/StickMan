@@ -6,6 +6,7 @@
 #define RIGHT -1
 #define FRONT 0
 #define ERROR -100
+#define MAX_LENGTH_NAME 100
 
 
 
