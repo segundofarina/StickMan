@@ -224,12 +224,7 @@ int main(int argc, char const *argv[]){
 			while(1){
 				executeaction("walk",RIGHT);
 				executeaction("walk",RIGHT);
-				executeaction("walk",RIGHT);
-				executeaction("walk",RIGHT);
-				executeaction("walk",RIGHT);
-
-				executeaction("walk",LEFT);
-				executeaction("walk",LEFT);
+				executeaction("jump",FRONT);	
 				executeaction("walk",LEFT);
 				executeaction("walk",LEFT);
 			}

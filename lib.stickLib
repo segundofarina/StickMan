@@ -160,7 +160,7 @@ walk[right]
     o  o  
    /    | 
   Oo    Oo
-jump [front]
+jump[front]
 
 
 
@@ -185,12 +185,6 @@ jump [front]
 
 
 
-
-
-
-
- 
-
 o    _    o
  \  (")  /
   \ o-o /
@@ -201,6 +195,8 @@ o    _    o
     O O
     | |
    oO Oo
+
+
 
 
 
@@ -222,6 +218,10 @@ o    _    o
     | |
    oO Oo
    
+
+
+
+
 
 
 
