@@ -8,10 +8,16 @@ start{
     man->yield "And i like to dance";
     ballet();
     headAndShoulers();
-    man->yield "now i will jump forever";
-    while(true){
+    man->yield "i like bycilesr";
+    man->ridingBike;
+    man->yield "Well that hurt";
+    i=5;
+    while(i--){
         man->jump;
+        man->squat + man->walk;
     }
+
+    
 }
 
 function ballet(){
