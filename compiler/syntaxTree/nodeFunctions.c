@@ -60,17 +60,17 @@ void startNodeFn(void * node) {
 		printf("Could not open file for output\n");
 		return ;
 	}
-	
+
 	fprintf(fp,"\n#include <stdio.h>\n");
 	fprintf(fp,"#include <stdlib.h>\n");
 	fprintf(fp,"#include <string.h>\n");
 	fprintf(fp,"#include \"../compiler/helpers/lib.h\"\n");
 	fprintf (fp,"extern int manPosition;\n");
-	fprintf (fp,"extern direction manDirection;\n"); 
+	fprintf (fp,"extern direction manDirection;\n");
 	fprintf (fp,"#define left LIB_LEFT\n");
 	fprintf (fp,"#define right LIB_RIGHT\n");
 	fprintf (fp,"#define position manPosition\n");
-	fprintf (fp,"#define direction manDirection\n"); 
+	fprintf (fp,"#define direction manDirection\n");
 	fprintf (fp,"#define eosR SCREEN_SPACES\n");
 	fprintf (fp,"#define eosL 0\n");
 	fprintf(fp,"\n int main() { ");
@@ -83,7 +83,6 @@ void startNodeFn(void * node) {
 	//print all functions declarations
 	(n->functions->runCode)(n->functions);
 	fclose(fp);
-
 }
 
 void headersNodeFn(void * node) {//se puede borrar
@@ -98,7 +97,7 @@ void headersNodeFn(void * node) {//se puede borrar
 		header = current->header;
 		fprintf(fp,"compiler_libraries[i] = malloc(strlen( \"");
 		(header->runCode)(header);
-	
+
 		current = current->next;
 	}
 }
@@ -130,7 +129,7 @@ void functionsNodeFn(void * node) {
 
 void startFnNodeFn(void * node) {
 	startFnNode * n = (startFnNode *) node;
-	
+	setCurrentFunction("start");
 	fprintf(fp,"initLibrary(compiler_libraries,0);");
 	(n->sentences->runCode)(n->sentences);
 	fprintf(fp,"return 0; } ");
@@ -235,7 +234,7 @@ void sentenceNodeFn(void * node) {
 			(((whileNode *)(n->content))->runCode)(n->content);
 			break;
 		case ST_FUNCTION_CALL:
-			functionCall = (functionCallNode *)(n->content);
+			functionCall = (functionCallNode *)(n->content);printf("acaaa\n");
 			checkFunctionCallError(functionCall, ST_VOID_TYPE);
 			(functionCall->runCode)(functionCall);
 			fprintf(fp,"; ");
@@ -283,7 +282,7 @@ void manActionNodeFn(void * node) {
 		if (existsActionNoDir(name1) >=0 ){
 			fprintf(fp,"executeAction( \"%s\" )",name1);
 		}else if (existsActionNoDir(name2) >=0 ){
-			fprintf(fp,"executeAction( \"%s\" )",name2);	
+			fprintf(fp,"executeAction( \"%s\" )",name2);
 		}else{
 			printError("Fatal Error binary action does not exsit");
 		}

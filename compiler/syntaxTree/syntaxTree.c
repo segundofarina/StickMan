@@ -74,6 +74,9 @@ startFnNode * createStartFnNode(sentencesNode * sentences) {
 	startFnNode * node = malloc(sizeof(startFnNode));
 	node->sentences = sentences;
 	node->functionType = ST_START_FN;
+	if(!createFunction("start", ST_VOID_TYPE, NULL)) {
+		printf("Fatal Error: function %s() has more than one declaration.\n", "start");
+	}
 	node->runCode = startFnNodeFn;
 	return node;
 }
