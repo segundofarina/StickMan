@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include"../lib.h"	
+#include"./helpers/lib.h"	
 extern int yylex();
 extern int yyparse();
 extern int yylineno;

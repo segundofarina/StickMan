@@ -2,7 +2,7 @@
 #include "nodeFunctions.h"
 #include "syntaxTree.h"
 #include <string.h>
-#include "../../lib.h"
+#include "../helpers/lib.h"
 
 
 void printError(char * message){
@@ -202,7 +202,7 @@ void manActionNodeFn(void * node) {
 		strcat(name1,n->var1);
 		strcat(name1,n->var2);
 		strcat(name2, n->var2);
-		strcat(name2, n->var2);
+		strcat(name2, n->var1);
 		if (existsActionNoDir(name1) >=0 ){
 			printf("executeAction( \"%s\" )",name1);
 		}else if (existsActionNoDir(name2) >=0 ){
