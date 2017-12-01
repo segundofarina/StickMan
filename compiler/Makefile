@@ -14,7 +14,7 @@ test:
 	$(MAKE) all
 
 
-	./cstickman < ../testCodes/mrmeeseeks.stick > ../compiled/compiledCode.c
+	./cstickman < ../testCodes/helloworld.stick 
 testCompiled:
 
 	gcc -o prueba helpers/lib.c ../compiled/compiledCode.c

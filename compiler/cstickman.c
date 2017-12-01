@@ -6,7 +6,7 @@ extern int yylineno;
 
 
 int main(){
-	initLibrary(NULL);
+	initLibrary(NULL,0);
 	return yyparse();
 }
 

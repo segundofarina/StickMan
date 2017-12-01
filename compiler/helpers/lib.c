@@ -202,6 +202,7 @@ int fillFrames(FILE *fp, action *a)
 
 int openActions(char *fileRoute)
 {
+	char dirWo [3][10]={"LEFT", "RIGHT","FRONT"};
 	int ans, quantity, i;
 	char *buffer;
 	FILE *fp = fopen(fileRoute, "r");
@@ -239,7 +240,7 @@ int openActions(char *fileRoute)
 			return ERROR;
 		}
 
-		printf("Name: %s direction: %d \n", a.name, a.direction);
+		printf("Succesful retrival Name: %s direction: %s \n", a.name, dirWo[a.direction]);
 		actions = realloc(actions, sizeof(action) * (actionsLen + 1));
 		memcpy(&(actions[actionsLen]), &a, sizeof(action));
 		actionsLen++;
@@ -390,13 +391,21 @@ int executeaction2(char *name, int dir, int position)
 	return ERROR;
 }
 
-int initLibrary(char * * fileRoutes){
+int initLibrary(char * * fileRoutes, int filesAmount){
 	int error1, error2;
 	error1 = openActions("./helpers/lib.stickLib");
 	error2 = openActions("./helpers/other.stickLib");
 	if (error1 == ERROR || error2 == ERROR)
 	{
 		return ERROR;
+	}
+	int error;
+
+	for(int i = 0; i< filesAmount; i++){
+		error = openActions(fileRoutes[i]);
+		if(error == ERROR){
+		return ERROR;
+		}
 	}
 	return 0;
 }
