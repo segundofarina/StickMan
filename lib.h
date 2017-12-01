@@ -8,7 +8,7 @@
 #define ERROR -100
 #define MAX_LENGTH_NAME 100
 #define SLEEP_MS 300
-
+#define YIELD_WIDTH 20
 
 
 typedef struct action {
