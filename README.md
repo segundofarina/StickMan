@@ -16,6 +16,8 @@ $> ./compiled/stickman.st
 ```
 For a better view of the output you should run the console on a screen of 180x30.
 
+While executing in Pampero the program may abort due to memory restrictions in Pampero. In Mac OS works with no problems.
+
 ### Code entry point
 The code's entry point is defined as:
 ```
