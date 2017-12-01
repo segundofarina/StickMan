@@ -1,21 +1,63 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "nodeFunctions.h"
 #include "syntaxTree.h"
 #include <string.h>
 #include "../helpers/lib.h"
-#include <stdlib.h>
+#include "../helpers/declarations.h"
 
 FILE *fp;
 
+void checkFunctionCallError(functionCallNode * functionCall, typeOp type);
+
+void typeAllFunction(typeOp type) {
+	switch(type) {
+		case ST_INTEGER_TYPE:
+		case ST_BOOLEAN_TYPE:
+			fprintf(fp,"int ");
+			break;
+		case ST_STRING_TYPE:
+			fprintf(fp,"char * ");
+			break;
+		case ST_VOID_TYPE:
+			fprintf(fp,"void ");
+			break;
+	}
+}
+
+void printAllFunctionParams(VarList * params) {
+	VarList * current = params;
+	while(current != NULL) {
+		typeAllFunction(current->variable->type);
+		fprintf(fp,"%s ", current->variable->name);
+		current = current->next;
+	}
+}
+
+void printAllFunction() {
+	FunctionList * allFunctions = getAllFunctionDeclarations();
+	while(allFunctions != NULL) {
+		Function * fn = allFunctions->function;
+		typeAllFunction(fn->returnType);
+		fprintf(fp,"%s( ", fn->name);
+		printAllFunctionParams(fn->parameters);
+		fprintf(fp,"); ");
+		allFunctions = allFunctions->next;
+	}
+}
+
+
+
 void printError(char * message){
+	printf("%s",message);
 	return;
 }
 void startNodeFn(void * node) {
 	startNode * n = (startNode *) node;
-	fp=fopen("compiledCode2.c", "w+");
+	fp=fopen("./compiled/compiledCode.c", "w+");
 	if (fp == NULL)
 	{
-		printf("not a valid route\n");
+		printf("Could not open file for output\n");
 		return ;
 	}
 	
@@ -30,8 +72,11 @@ void startNodeFn(void * node) {
 	fprintf (fp,"#define position manPosition\n");
 	fprintf (fp,"#define direction manDirection\n"); 
 	fprintf (fp,"#define eosR SCREEN_SPACES\n");
-	fprintf (fp,"#define esoL 0\n");
+	fprintf (fp,"#define eosL 0\n");
 	fprintf(fp,"\n int main() { ");
+
+
+	printAllFunction();
 
 
 	(n->headers->runCode)(n->headers);//no hace falta ejecutarlo no hace nada
@@ -93,6 +138,7 @@ void startFnNodeFn(void * node) {
 
 void functionNodeFn(void * node) {
 	functionNode * n = (functionNode *) node;
+	setCurrentFunction(n->name);
 	if(n->returnType != NULL) {
 		(n->returnType->runCode)(n->returnType);
 	} else {
@@ -164,6 +210,7 @@ void sentencesNodeFn(void * node) {
 
 void sentenceNodeFn(void * node) {
 	sentenceNode * n = (sentenceNode *) node;
+	functionCallNode * functionCall;
 
 	switch(n->sentenceType) {
 		case ST_ASSIGNMENT:
@@ -188,7 +235,9 @@ void sentenceNodeFn(void * node) {
 			(((whileNode *)(n->content))->runCode)(n->content);
 			break;
 		case ST_FUNCTION_CALL:
-			(((functionCallNode *)(n->content))->runCode)(n->content);
+			functionCall = (functionCallNode *)(n->content);
+			checkFunctionCallError(functionCall, ST_VOID_TYPE);
+			(functionCall->runCode)(functionCall);
 			fprintf(fp,"; ");
 			break;
 		case ST_MAN_ACTION:
@@ -218,9 +267,9 @@ void manActionNodeFn(void * node) {
 			}else{
 				printError("Fatal Error: %s is not a valid action");//
 			}
-			
+
 		}
-		
+
 
 	} else {
 		//accion n->var1 + n->var2 al man
@@ -294,6 +343,7 @@ void expressionNodeFn(void * node) {
 			break;
 		case ST_EXP_FUNCTIONCALL:
 			//ver que exista y el return type
+			checkFunctionCallError(n->functionCall, ST_INTEGER_TYPE);
 			(n->functionCall->runCode)(n->functionCall);
 			break;
 		case ST_EXP_ADD:
@@ -360,6 +410,7 @@ void conditionNodeFn(void * node) {
 			break;
 		case ST_CONDITION_FN:
 			//verifico que exista y el ret type
+			checkFunctionCallError(n->functionCall, ST_BOOLEAN_TYPE);
 			(n->functionCall->runCode)(n->functionCall);
 			break;
 	}
@@ -387,11 +438,27 @@ void returnNodeFn(void * node) {
 
 void declarationNodeFn(void * node) {
 	declarationNode * n = (declarationNode *) node;
+
+	/* Set variable as declared */
+	if(!addVariable(createVariable(n->type->type, n->variable))) {
+		printf("Fatal Error: variable %s is defined more than once in the function.\n", n->variable);
+	}
+
 	(n->type->runCode)(n->type);
 	fprintf(fp,"%s ", n->variable);
 	if(n->declarationType == ST_DECLARATION_ASIGN) {
 		fprintf(fp,"= ");
 		(n->expression->runCode)(n->expression);
+	} else if(n->declarationType == ST_DECLARATION_ASIGN_BOOLEAN) {
+		if(n->type->type != ST_BOOLEAN_TYPE) {
+			printf("Fatal Error: cannot asign boolean to non boolean variable %s\n", n->variable);
+		}
+		fprintf(fp,"= %d ", n->boolean);
+	} else if(n->declarationType == ST_DECLARATION_ASIGN_STRING) {
+		if(n->type->type != ST_STRING_TYPE) {
+			printf("Fatal Error: cannot asign string to non string variable %s\n", n->variable);
+		}
+		fprintf(fp,"= %s ", n->str);
 	}
 }
 
@@ -418,23 +485,47 @@ void elseBlockNodeFn(void * node) {
 	}
 }
 
+void checkVarAssignError(char * name, typeOp type) {
+	switch(hasVariableWithType(createVariable(type, name))) {
+		case VAR_NAME_ERROR:
+			printf("Fatal Error: variable %s is not declared in the function.\n", name);
+			break;
+		case VAR_TYPE_ERROR:
+			printf("Fatal Error: variable %s cannot be assigned because of a type error.\n", name);
+			break;
+		case VAR_NO_ERROR:
+			break;
+	}
+
+}
+
 void assignmentNodeFn(void * node) {
 	assignmentNode * n = (assignmentNode *) node;
 	switch (n->assignmentType) {
 		case ST_ASSIGNMENT_EXPRESSION:
+			checkVarAssignError(n->variable, ST_INTEGER_TYPE);
 			fprintf(fp,"%s ", n->variable);
 			(n->assignmentOp->runCode)(n->assignmentOp);
 			(n->expression->runCode)(n->expression);
 			break;
 		case ST_ASSIGNMENT_INCREMENT:
+			checkVarAssignError(n->variable, ST_INTEGER_TYPE);
 			fprintf(fp,"%s ", n->variable);
 			(n->incOp->runCode)(n->incOp);
 			break;
 		case ST_ASSIGNMENT_MAN:
-		
+
 			(n->manAttribute->runCode)(n->manAttribute);
 			fprintf(fp," = ");
 			(n->expression->runCode)(n->expression);
+			break;
+		case ST_ASSIGNMENT_STRING:
+			checkVarAssignError(n->variable, ST_STRING_TYPE);
+			fprintf(fp,"%s=%s",n->variable, n->str);
+			break;
+		case ST_ASSIGNMENT_BOOLEAN:
+			checkVarAssignError(n->variable, ST_BOOLEAN_TYPE);
+			fprintf(fp,"%s=%d\n", n->variable, n->boolean);
 			break;
 	}
 }
@@ -501,5 +592,47 @@ void logicalOpFn(void * node) {
 	}
 
 
+
+}
+
+VarList * addToParamListFn(Variable * param, VarList * paramList) {
+	VarList * list = (VarList *) malloc(sizeof(VarList));
+	list->variable = param;
+	list->next = paramList;
+	return list;
+}
+
+VarList * getParametersFn(fnParametersNode * parameters) {
+	VarList * paramList = NULL;
+
+	if(parameters == NULL) {
+		return NULL;
+	}
+
+	fnParameterList * current = parameters->list;
+	while(current != NULL) {
+		fnParameterNode * parameter = current->fnParameter;
+		paramList = addToParamListFn(createParameter(getVarType(parameter->str), parameter->str), paramList);
+		current = current->next;
+	}
+
+	return paramList;
+}
+
+void checkFunctionCallError(functionCallNode * functionCall, typeOp type) {
+
+	switch(hasFunctionWithType(functionCall->name, type, getParametersFn(functionCall->fnParameters))) {
+		case FN_NAME_ERROR:
+			printf("Fatal error: function %s is not declared.\n", functionCall->name);
+			break;
+		case FN_RETURN_ERROR:
+			printf("Fatal error: return type of function %s does not match it's declaration.\n", functionCall->name);
+			break;
+		case FN_PARAM_ERROR:
+			printf("Fatal error: parameters of function %s don't match it's declaration.\n", functionCall->name);
+			break;
+		case FN_NO_ERROR:
+			break;
+	}
 
 }

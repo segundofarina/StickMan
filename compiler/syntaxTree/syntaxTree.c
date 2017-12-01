@@ -347,15 +347,20 @@ returnNode * createReturnNode(typeReturn retType, int boolean, expressionNode * 
 	return node;
 }
 
-declarationNode * createDeclarationNode(typeDeclaration declarationType, typeNode * type, expressionNode * expression, char * variable){
+declarationNode * createDeclarationNode(typeDeclaration declarationType, typeNode * type, expressionNode * expression, char * variable, char * str, int boolean){
 	declarationNode * node = malloc(sizeof(declarationNode));
 	node->declarationType = declarationType;
 	node->type = type;
 	node->expression = expression;
+	node->boolean = boolean;
 	node->sentenceType = ST_DECLARATION;
 	if(variable != NULL) {
 		node->variable = malloc(strlen(variable)+1);
 		strcpy(node->variable, variable);
+	}
+	if(str != NULL) {
+		node->str = malloc(strlen(str)+1);
+		strcpy(node->str, str);
 	}
 	node->runCode = declarationNodeFn;
 	return node;
@@ -380,7 +385,7 @@ elseBlockNode * createElseBlockNode(typeElseBlock typeElse, ifNode * elseif, sen
 	return node;
 }
 
-assignmentNode * createAssignmentNode(typeAssigment assigmentType, assignmentOpNode * assignmentOp, expressionNode * expression, incOpNode * incOp, manAttributeNode * manAttribute, char * variable){
+assignmentNode * createAssignmentNode(typeAssigment assigmentType, assignmentOpNode * assignmentOp, expressionNode * expression, incOpNode * incOp, manAttributeNode * manAttribute, char * variable, char * str, int boolean) {
 	assignmentNode * node = malloc(sizeof(assignmentNode));
 	node->assignmentType = assigmentType;
 	node->assignmentOp = assignmentOp;
@@ -388,9 +393,14 @@ assignmentNode * createAssignmentNode(typeAssigment assigmentType, assignmentOpN
 	node->incOp = incOp;
 	node->manAttribute = manAttribute;
 	node->sentenceType = ST_ASSIGNMENT;
+	node->boolean = boolean;
 	if(variable != NULL) {
 		node->variable = malloc(strlen(variable)+1);
 		strcpy(node->variable, variable);
+	}
+	if(str != NULL) {
+		node->str = malloc(strlen(str)+1);
+		strcpy(node->str, str);
 	}
 	node->runCode = assignmentNodeFn;
 	return node;

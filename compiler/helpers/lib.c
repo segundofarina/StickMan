@@ -393,8 +393,8 @@ int executeaction2(char *name, int dir, int position)
 
 int initLibrary(char * * fileRoutes, int filesAmount){
 	int error1, error2;
-	error1 = openActions("./helpers/lib.stickLib");
-	error2 = openActions("./helpers/other.stickLib");
+	error1 = openActions("./compiler/helpers/lib.stickLib");
+	error2 = openActions("./compiler/helpers/other.stickLib");
 	if (error1 == ERROR || error2 == ERROR)
 	{
 		return ERROR;

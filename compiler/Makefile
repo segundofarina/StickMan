@@ -10,13 +10,5 @@ grammar:
 lex:
 	lex lex.l
 
-test:
-	$(MAKE) all
-
-
-	./cstickman < ../testCodes/helloworld.stick 
-testCompiled:
-
-	gcc -o prueba helpers/lib.c ../compiled/compiledCode.c
 clean:
 	rm lex.yy.c y.tab.c y.tab.h

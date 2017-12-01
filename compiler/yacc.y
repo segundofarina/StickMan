@@ -158,9 +158,11 @@ Sentece: Assignment SEMICOLON							{ $$ = createSentenceNode($1, ST_ASSIGNMENT)
 		| For											{ $$ = createSentenceNode($1, ST_FOR); }
 		| FunctionCall SEMICOLON						{ $$ = createSentenceNode($1, ST_FUNCTION_CALL); }
 		| ManAction SEMICOLON							{ $$ = createSentenceNode($1, ST_MAN_ACTION); }
-Assignment: VARIABLE AssignmentOp Expression			{ $$ = createAssignmentNode(ST_ASSIGNMENT_EXPRESSION, $2, $3, NULL, NULL,$1); }
-		| VARIABLE IncOp								{ $$ = createAssignmentNode(ST_ASSIGNMENT_INCREMENT, NULL, NULL, $2, NULL,$1); }
-		| ManAttribute EQUAL Expression					{ $$ = createAssignmentNode(ST_ASSIGNMENT_MAN, NULL, $3, NULL, $1, NULL); }
+Assignment: VARIABLE EQUAL STRING						{ $$ = createAssignmentNode(ST_ASSIGNMENT_STRING, NULL, NULL, NULL, NULL,$1, $3, 0); }
+		| VARIABLE EQUAL BOOLEAN						{ $$ = createAssignmentNode(ST_ASSIGNMENT_BOOLEAN, NULL, NULL, NULL, NULL,$1, NULL, $3); }
+		| VARIABLE AssignmentOp Expression				{ $$ = createAssignmentNode(ST_ASSIGNMENT_EXPRESSION, $2, $3, NULL, NULL,$1 , NULL, 0); }
+		| VARIABLE IncOp								{ $$ = createAssignmentNode(ST_ASSIGNMENT_INCREMENT, NULL, NULL, $2, NULL,$1, NULL, 0); }
+		| ManAttribute EQUAL Expression					{ $$ = createAssignmentNode(ST_ASSIGNMENT_MAN, NULL, $3, NULL, $1, NULL, NULL, 0); }
 AssignmentOp: EQUAL										{ $$ = createAssignmentOpNode(ST_EQUAL); }
 		| ADD EQUAL										{ $$ = createAssignmentOpNode(ST_ADD_EQUAL); }
 		| SUBSTRACT EQUAL								{ $$ = createAssignmentOpNode(ST_SUBSTRACT_EQUAL); }
@@ -168,8 +170,10 @@ AssignmentOp: EQUAL										{ $$ = createAssignmentOpNode(ST_EQUAL); }
 		| DIVIDE EQUAL									{ $$ = createAssignmentOpNode(ST_DIVIDE_EQUAL); }
 IncOp: ADD ADD											{ $$ = createIncOpNode(ST_INCREMENT_ADD); }
 		| SUBSTRACT SUBSTRACT							{ $$ = createIncOpNode(ST_INCREMENT_SUBSTRACT); }
-Declaration: Type VARIABLE EQUAL Expression				{ $$ = createDeclarationNode(ST_DECLARATION_ASIGN, $1, $4, $2); }
-		| Type VARIABLE									{ $$ = createDeclarationNode(ST_DECLARATION_DEC, $1, NULL, $2); }
+Declaration: Type VARIABLE EQUAL Expression				{ $$ = createDeclarationNode(ST_DECLARATION_ASIGN, $1, $4, $2, NULL, 0); }
+		| Type VARIABLE EQUAL BOOLEAN					{ $$ = createDeclarationNode(ST_DECLARATION_ASIGN_BOOLEAN, $1, NULL, $2, NULL, $4); }
+		| Type VARIABLE EQUAL STRING					{ $$ = createDeclarationNode(ST_DECLARATION_ASIGN_STRING, $1, NULL, $2, $4, 0); }
+		| Type VARIABLE									{ $$ = createDeclarationNode(ST_DECLARATION_DEC, $1, NULL, $2, NULL, 0); }
 Return: RETURN Expression								{ $$ = createReturnNode(ST_RETURN_EXPRESSION, 0, $2); }
 		| RETURN BOOLEAN								{ $$ = createReturnNode(ST_RETURN_BOOLEAN, $2, NULL); }
 Type: INTEGER_TYPE										{ $$ = createTypeNode(ST_INTEGER_TYPE); }
@@ -218,5 +222,5 @@ ManParams: /* empty */															{ $$ = NULL; }
 %%
 
 void yyerror (char *s) {
-	printf("%s in line %d, reading %s\n", s, yylineno, yytext);
+	printf("Unexpected token in line %d, while reading %s...\n", yylineno, yytext);
 }

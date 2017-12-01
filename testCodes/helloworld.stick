@@ -5,6 +5,9 @@ start {
 
 	say("hola!");
 
+	string var = "hola";
+	var = "hola";
+
 	while(repetitions < 15) {
 
 		checkEndOfScreen();
