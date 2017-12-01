@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include "nodeFunctions.h"
 #include "syntaxTree.h"
-<<<<<<< HEAD
 #include <string.h>
 #include "../helpers/lib.h"
 #include "../helpers/declarations.h"
