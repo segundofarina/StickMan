@@ -1,6 +1,20 @@
 # Stickman Code Definition
 
 Stickman is a basic programming language for controlling a stickman. The output is printed in console.
+### Compiling and  executing
+In this github you will find all the necesary files to compile a code.
+For compiling a stickMan code you will need first to make the compiler by entering the compiler folder and running `make`.
+Then go back to the root folder and you are ready for compiling source file simply run:
+
+```
+$> ./cstickman.sh (yourSourceFile)
+ 
+	/* This is creates a stickman.st in compiled/stickman.st */
+
+$> ./compiled/stickman.st
+
+```
+For a better view of the output you should run the console on a screen of 180x30.
 
 ### Code entry point
 The code's entry point is defined as:
