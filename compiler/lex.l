@@ -4,7 +4,7 @@
   #include <string.h>
   #include "syntaxTree/syntaxTree.h"
   #include "y.tab.h"
-  extern yy_size_t yyleng;
+  extern int yyleng;
 %}
 
 %option noyywrap
