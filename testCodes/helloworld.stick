@@ -12,7 +12,7 @@ start {
 		if(isPar()) {
 			moveAndJump();
 		} else {
-			man->move;
+			man->walk;
 		}
 
 		repetitions++;
@@ -22,7 +22,7 @@ start {
 }
 
 func moveAndJump() {
-	man->move + man->jump;
+	man->walk + man->jump;
 }
 
 func isPar() -> boolean {

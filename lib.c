@@ -5,13 +5,14 @@
 #include <string.h>
 #include <regex.h>
 #include <ctype.h>
+#include "sleepfn.h"
 
 
 action *actions;
 int actionsLen = 0;
 
 int manPosition = 0;
-direction manDirection = FRONT;
+direction manDirection = LIB_FRONT;
 
 int lineno = 0;
 
@@ -47,7 +48,7 @@ char *getSpaces(int position)
 
 char *editSpaces(char *spaces, direction dir, int position, int it)
 {
-	if (dir == RIGHT)
+	if (dir == LIB_RIGHT)
 	{
 		if (it % 2)
 		{
@@ -58,7 +59,7 @@ char *editSpaces(char *spaces, direction dir, int position, int it)
 			strcat(spaces, " ");
 		}
 	}
-	else if (dir == LEFT && position != 0)
+	else if (dir == LIB_LEFT && position != 0)
 	{
 		if (it % 2)
 		{
@@ -149,15 +150,15 @@ int fillHeader(FILE *fp, action *a)
 
 	if (strcmp(attr, "right]") == 0)
 	{
-		a->direction = RIGHT;
+		a->direction = LIB_RIGHT;
 	}
 	else if (strcmp(attr, "left]") == 0)
 	{
-		a->direction = LEFT;
+		a->direction = LIB_LEFT;
 	}
 	else if (strcmp(attr, "front]") == 0)
 	{
-		a->direction = FRONT;
+		a->direction = LIB_FRONT;
 	}
 	else
 	{
@@ -251,7 +252,21 @@ int openActions(char *fileRoute)
 	return 0;
 }
 
-int existsAction(char *name, int dir)
+int existsActionNoDir(char *name)
+{
+	int i;
+	for (i = 0; i < actionsLen; i++)
+	{
+		if (strcmp(name, actions[i].name) == 0 )
+		{
+			return i;
+		}
+	}
+	printf("FATAL ERROR: Action does not exist %s",name);
+	return -1;
+}
+
+int existsAction(char *name, direction dir)
 {
 	int i;
 	for (i = 0; i < actionsLen; i++)
@@ -286,25 +301,25 @@ void setDirection(direction dir)
 
 void movePosition(int dir)
 {
-	if (dir == RIGHT)
+	if (dir == LIB_RIGHT)
 	{
 		if (manPosition < SCREEN_SPACES)
 		{
 			manPosition += 1;
 		}
-		dir = RIGHT;
+		dir = LIB_RIGHT;
 	}
-	else if (dir == LEFT)
+	else if (dir == LIB_LEFT)
 	{
 		if (manPosition > 0)
 		{
 			manPosition -= 1;
 		}
-		manDirection = LEFT;
+		manDirection = LIB_LEFT;
 	}
-	else if (dir == FRONT)
+	else if (dir == LIB_FRONT)
 	{
-		manDirection = FRONT;
+		manDirection = LIB_FRONT;
 	}
 }
 
@@ -345,18 +360,18 @@ void printYield(char * string, char movement[ACTION_LENGTH][FRAME_HEIGHT][FRAME_
 
 int executeYield(char *string)
 {	
-	int i = existsAction("stand",FRONT);
+	int i = existsAction("stand",LIB_FRONT);
 	printYield( string, actions[i].frames, manPosition, manDirection);
 	return 1;
 }
 
-int executeaction(char *name, int dir)
+int executeAction(char *name)
 {
 	int i;
-	if ((i = existsAction(name, dir)) >= 0)
+	if ((i = existsAction(name, manDirection)) >= 0)
 	{
 		printMovement(actions[i].frames, manPosition, actions[i].direction);
-		movePosition(dir);
+		movePosition(manDirection);
 		return 0;
 	}
 	return ERROR;
@@ -373,7 +388,18 @@ int executeaction2(char *name, int dir, int position)
 	return ERROR;
 }
 
-int main(int argc, char const *argv[])
+int initLibrary(char * * fileRoutes){
+	int error1, error2;
+	error1 = openActions("../lib.stickLib");
+	error2 = openActions("../other.stickLib");
+	if (error1 == ERROR || error2 == ERROR)
+	{
+		return ERROR;
+	}
+	return 0;
+}
+
+int test(int argc, char const *argv[])
 {
 
 	int error1, error2;
@@ -384,7 +410,7 @@ int main(int argc, char const *argv[])
 		return ERROR;
 	}
 
-	executeaction("jump", FRONT);
+	executeAction("jump");
 	//executeaction("walk", RIGHT);
 	
 	executeYield("HOLA FLORRCI UQUE PASA SI PONGO UN STRING MUY LARGO TIP @USKKDJSJKSD HSDHJS HJSDHJSD SDJH");
@@ -395,7 +421,7 @@ int main(int argc, char const *argv[])
 	{
 		for (int i = 0; i < actionsLen; i++)
 		{
-			executeaction(actions[i].name, actions[i].direction);
+			executeAction(actions[i].name);
 		}
 
 		// executeaction("walk", LEFT);

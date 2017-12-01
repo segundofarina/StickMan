@@ -1,2 +1,11 @@
-#include <stdio.h>
-int main() { int times = 5 ; while( times > 0 ) { if( direction == right ){ justDance( ) ; funcion_set_attr( direction , left ) ; } else{ workOut( ) ; } times -- ; } if( direction == right ){ man_action_unary() ; funcion_set_attr( directon , left ) ; man_action_unary() ; } else{ man_action_unary() ; } man_action_unary() ; return 0; } void keepSpinning( int spin ){ while( spin > 0 ) { man_action_unary() ; spin -- ; } } void justDance( ){ int spin = 5 ; man_action_unary() ; keepSpinning( spin ) ; man_action_unary() ; } void workOut( ){ man_action_unary() ; funcion_set_attr( direction , left ) ; man_action_unary() ; man_action_unary() ; } 
+Name: walk direction: 0 
+Name: walk direction: 1 
+Name: jump direction: 2 
+Name: stand direction: 2 
+Name: roll direction: 1 
+Name: roll direction: 0 
+Name: weightLifting direction: 2 
+Name: ridingBike direction: 1 
+Name: goesArroundComesArround direction: 2 
+ #include <stdio.h>
+int main() { int repetitions = 0 ; say( "hola!" ) ; while( repetitions < 15 ) { checkEndOfScreen( ) ; if( isPar( ) ){ moveAndJump( ) ; } else{ executeAction( "walk" ); } repetitions ++ ; } say( "chau!" ) ; return 0; } void moveAndJump( ){ FATAL ERROR: Action does not exist walkjumpFATAL ERROR: Action does not exist jumpjump; } int isPar( ){ if( position % 2 == 0 ){ return 0 ; } return 1 ; } void say( char * str ){ executeYield(str); } void checkEndOfScreen( ){ if( position == eosR ){ direction  = left ; } if( position == eosL ){ direction  = right ; } } 
