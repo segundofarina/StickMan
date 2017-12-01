@@ -103,9 +103,6 @@ void printMovement(char movement[ACTION_LENGTH][FRAME_HEIGHT][FRAME_WIDTH], int 
 		system("clear");
 	}
 	
-	if(spaces != NULL){
-		free(spaces);
-	}
 	
 }
 
