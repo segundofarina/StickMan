@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include "nodeFunctions.h"
 #include "syntaxTree.h"
+<<<<<<< HEAD
+#include <string.h>
+#include "../helpers/lib.h"
 #include "../helpers/declarations.h"
 
 void checkFunctionCallError(functionCallNode * functionCall, typeOp type);
@@ -42,6 +45,10 @@ void printAllFunction() {
 	}
 }
 
+
+void printError(char * message){
+	return;
+}
 void startNodeFn(void * node) {
 	startNode * n = (startNode *) node;
 
@@ -212,21 +219,53 @@ void sentenceNodeFn(void * node) {
 }
 
 void manActionNodeFn(void * node) {
+
 	manActionNode * n = (manActionNode *) node;
 
 	if(n->manActionType == ST_MAN_ACTION_UNARY) {
 		//accion n->var1 al man
 		//puede tener parametros
-		printf("man_action_unary() ");
+		if(strcmp(n->var1, "yield") == 0)
+		{
+			printf("executeYield(");
+			(n->manParam1->runCode)(n->manParam1);
+			printf(")");
+		}
+		else
+		{
+			if (existsActionNoDir(n->var1) >=0){
+				printf("executeAction( \"%s\" )",n->var1);
+			}else{
+				printError("Fatal Error: %s is not a valid action");//
+			}
+
+		}
+
+
 	} else {
 		//accion n->var1 + n->var2 al man
 		//puede tener parametros
-		printf("man_action_binary() ");
+		char name1 [MAX_LENGTH_NAME] ={0};
+		char name2 [MAX_LENGTH_NAME] ={0};
+		strcat(name1,n->var1);
+		strcat(name1,n->var2);
+		strcat(name2, n->var2);
+		strcat(name2, n->var1);
+		if (existsActionNoDir(name1) >=0 ){
+			printf("executeAction( \"%s\" )",name1);
+		}else if (existsActionNoDir(name2) >=0 ){
+			printf("executeAction( \"%s\" )",name2);
+		}else{
+			printError("Fatal Error binaryaction does not exsit");
+		}
 	}
 }
 
 void manParamNodeFn(void * node) {
 	// implementar
+	manParamNode * n = (manParamNode *) node;
+	printf("%s",n->param);
+
 }
 
 void fnFunctionCallFn(void * node) {
@@ -446,11 +485,10 @@ void assignmentNodeFn(void * node) {
 			(n->incOp->runCode)(n->incOp);
 			break;
 		case ST_ASSIGNMENT_MAN:
-			printf("funcion_set_attr( ");
+
 			(n->manAttribute->runCode)(n->manAttribute);
-			printf(", ");
+			printf(" = ");
 			(n->expression->runCode)(n->expression);
-			printf(") ");
 			break;
 		case ST_ASSIGNMENT_STRING:
 			checkVarAssignError(n->variable, ST_STRING_TYPE);
@@ -523,6 +561,9 @@ void logicalOpFn(void * node) {
 			printf("> ");
 			break;
 	}
+
+
+
 }
 
 VarList * addToParamListFn(Variable * param, VarList * paramList) {

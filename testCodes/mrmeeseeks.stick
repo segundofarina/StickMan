@@ -1,0 +1,57 @@
+
+start{
+
+	man->moveleftarm;
+	man->yield "Look at me! I'm Mr Meeseeks";
+	man->moverightarm;
+
+	man.direction = right;
+	man->yield "walk with me...";
+	while(man.position != eosR){
+		man->walk;
+	}
+
+	man->yield "how about a little workout??";
+	int times = 3;
+	while(times != 0){
+		man->weightLifting;
+		times = times -1;
+	}
+
+	man->yield "or some squats";
+	times = 3;
+	while(times !=0 ){
+		man->squat;
+		times = times -1;
+	}
+
+	man.direction = left;
+	man->roll;
+
+	man->yield "like a ride by bike?";
+	man->ridingBike;
+
+	man->yield "oh fuck";
+	man->yield "doesn't matter";
+	man->comesArroundGoesArround;
+
+	man->yield "do you know this one?";
+	times = 3;
+	while(times !=0 ){
+		man->headsholders;
+		times = times -1;
+	}
+
+	man->yield "let's go back";
+	man.direction = left;
+	times = 3;
+	while(times !=0 ){
+		man->jumpwalk;
+		times = times -1;
+	}
+
+	man->yield "what a day";
+	man->yield "Goodbye!!";
+	man->moveleftarm;
+	man->moverightarm;
+}
