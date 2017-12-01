@@ -14,7 +14,7 @@ start {
 	}
 	if(man.direction == right){
 		man->roll;
-		man.directon = left;
+		man.direction = left;
 		man->roll;
 	}else{
 		man->roll;
@@ -42,4 +42,3 @@ func workOut(){
 	man->walk;
 	man->weightLifting;
 }
-

@@ -78,9 +78,9 @@ void startNodeFn(void * node) {
 
 	printAllFunction();
 
-
 	(n->headers->runCode)(n->headers);//no hace falta ejecutarlo no hace nada
 	//print all functions declarations
+
 	(n->functions->runCode)(n->functions);
 	fclose(fp);
 }
@@ -116,6 +116,7 @@ void functionsNodeFn(void * node) {
 	startFnNode * startFn;
 
 	while(current != NULL) {
+
 		if(current->functionType == ST_START_FN) {
 			startFn = (startFnNode *) current->function;
 			(startFn->runCode)(startFn);
@@ -123,6 +124,7 @@ void functionsNodeFn(void * node) {
 			function = (functionNode *) current->function;
 			(function->runCode)(function);
 		}
+
 		current = current->next;
 	}
 }
@@ -234,7 +236,7 @@ void sentenceNodeFn(void * node) {
 			(((whileNode *)(n->content))->runCode)(n->content);
 			break;
 		case ST_FUNCTION_CALL:
-			functionCall = (functionCallNode *)(n->content);printf("acaaa\n");
+			functionCall = (functionCallNode *)(n->content);
 			checkFunctionCallError(functionCall, ST_VOID_TYPE);
 			(functionCall->runCode)(functionCall);
 			fprintf(fp,"; ");
@@ -264,7 +266,7 @@ void manActionNodeFn(void * node) {
 			if (existsActionNoDir(n->var1) >=0){
 				fprintf(fp,"executeAction( \"%s\" )",n->var1);
 			}else{
-				printError("Fatal Error: %s is not a valid action");//
+				printf("Fatal Error: %s is not a valid action",n->var1);//
 			}
 
 		}
@@ -620,7 +622,7 @@ VarList * getParametersFn(fnParametersNode * parameters) {
 
 void checkFunctionCallError(functionCallNode * functionCall, typeOp type) {
 
-	switch(hasFunctionWithType(functionCall->name, type, getParametersFn(functionCall->fnParameters))) {
+	switch(hasFunctionWithType(functionCall->name, type, NULL)) {
 		case FN_NAME_ERROR:
 			printf("Fatal error: function %s is not declared.\n", functionCall->name);
 			break;
@@ -628,7 +630,7 @@ void checkFunctionCallError(functionCallNode * functionCall, typeOp type) {
 			printf("Fatal error: return type of function %s does not match it's declaration.\n", functionCall->name);
 			break;
 		case FN_PARAM_ERROR:
-			printf("Fatal error: parameters of function %s don't match it's declaration.\n", functionCall->name);
+			//printf("Fatal error: parameters of function %s don't match it's declaration.\n", functionCall->name);
 			break;
 		case FN_NO_ERROR:
 			break;

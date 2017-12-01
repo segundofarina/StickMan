@@ -7,6 +7,7 @@ start{
 
 	man.direction = right;
 	man->yield "walk with me...";
+	man.direction = right;
 	while(man.position != eosR){
 		man->walk;
 	}
@@ -33,7 +34,7 @@ start{
 
 	man->yield "oh fuck";
 	man->yield "doesn't matter";
-	man->comesArroundGoesArround;
+	man->goesArroundComesArround;
 
 	man->yield "do you know this one?";
 	times = 3;
