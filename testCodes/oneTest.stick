@@ -22,7 +22,8 @@ start {
 	man->yield "I'll be back";
 }
 
-func keepSpinning(int spin){
+func keepSpinning(){
+	int spin = 5;
 	while(spin > 0){
 		man->goesArroundComesArround;
 		spin--;
@@ -32,13 +33,13 @@ func keepSpinning(int spin){
 func justDance(){
 	int spin = 5;
 	man->walk;
-	keepSpinning(spin);
+	keepSpinning();
 	man->jump;
 }
 
 func workOut(){
 	man->weightLifting;
-	man.direction = left;
+	man.direction = right;
 	man->walk;
 	man->weightLifting;
 }

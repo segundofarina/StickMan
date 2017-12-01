@@ -1,0 +1,25 @@
+start{
+    int i;
+    man->yiled "Hey! how are you?";
+    for(i=0; i<5 ; i++){
+        man->walk;
+    }
+    man->yiled "My name is Juan";
+    man->yield "And i like to dance";
+    ballet();
+    headAndShoulers();
+    man->yield "now i will jump forever";
+    while(true){
+        man->jump;
+    }
+}
+
+function ballet(){
+    man->yield "this is the ballet classic";
+    man->goesArroundComesArround;
+}
+
+function headAndShoulers(){
+    man->jump + man->walk;
+    man->headsholders;
+}

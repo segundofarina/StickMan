@@ -28,6 +28,8 @@ int executeYield(char *string);
 
 int initLibrary(char * * fileRoutes, int filesAmount);
 
+int initLibraryCompiler(char * * fileRoutes, int filesAmount);
+
 int existsAction(char * name , direction dir);
 
 int existsActionNoDir(char *name);
