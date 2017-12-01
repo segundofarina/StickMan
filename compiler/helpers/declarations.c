@@ -20,6 +20,18 @@ Function * searchFunction(char * name) {
 	return NULL;
 }
 
+/* Search for variable */
+Variable * searchVariable(char * name, Function * fn) {
+	VarList * current = fn->variables;
+	while(current != NULL) {
+		if(strcmp(current->variable->name, name) == 0) {
+			return current->variable;
+		}
+		current = current->next;
+	}
+	return NULL;
+}
+
 /* Check if function was declared */
 int hasFunction(char * name) {
 	if(searchFunction(name) == NULL) {
@@ -128,49 +140,95 @@ int addVariable(Variable * var) {
 	return 1;
 }
 
-/*
-int hasFunctionDeclaration() {
-
+void setCurrentFunction(char * name) {
+	currentFunction = searchFunction(name);
 }
 
-int hasVariableWithType() {
-
-}*/
-
-/*
-int functionHasParameter() {
-
+varError hasVariableWithType(Variable * var) {
+	 VarList * current = currentFunction->variables;
+	 while(current != NULL) {
+		 int nameCmp = strcmp(current->variable->name, var->name);
+		 if(nameCmp == 0 && current->variable->type == var->type) {
+			 return VAR_NO_ERROR;
+		 } else if(nameCmp == 0) {
+			 return VAR_TYPE_ERROR;
+		 }
+		 current = current->next;
+	 }
+	 return VAR_NAME_ERROR;
 }
-*/
-
-// paramList = addToParamList(param, NULL)
-// paramList = addToParamList(param, paramList)
-// createFunction()
 
 
-// hasFunction()
-// hasVariable(Function fn, var)
-// hasParameter(Function fn, param)
-/*
-int main() {
-	VarList * paramList = addToParamList(createParameter(ST_INTEGER_TYPE, "hola"), NULL);
-	paramList = addToParamList(createParameter(ST_INTEGER_TYPE, "como"), paramList);
-	paramList = addToParamList(createParameter(ST_INTEGER_TYPE, "va"), paramList);
+/* Check for same list */
+int checkParamList(VarList * paramList1, VarList * paramList2) {
+	/*VarList * current1 = paramList1;
+	VarList * current2 = paramList2;
+	int found;
+	while(current1 != NULL) {
+		current2 = paramList2;
+		found = 0;
+		while(current2 != NULL && !found) {
+			if(strcmp(current1->variable->name, current2->variable->name) == 0 && current1->variable->type == current2->variable->type) {
+				found = 1;
+			}
+			current2 = current2->next;
+		}
+		if(!found) {
+			return 0;
+		}
+		current1 = current1->next;
+	}*/
+	VarList * current = paramList1;
+	int count1 = 0, count2 = 0;
+	while(current != NULL) {
+		count1++;
+		current = current->next;
+	}
+	current = paramList2;
+	while(current != NULL) {
+		count2++;
+		current = current->next;
+	}
+	if(count1 != count2) {
+		return 0;
+	}
+	return 1;
+}
 
-	createFunction("pregunta", ST_INTEGER_TYPE, paramList);
+fnError hasFunctionWithType(char * name, typeOp returnType, VarList * parameters) {
+	FunctionList * current = functionDeclaredList;
+	while (current != NULL) {
+		int nameCmp = strcmp(current->function->name, name);
+		if(nameCmp == 0 && current->function->returnType == returnType && checkParamList(current->function->parameters, parameters)) {
+			return FN_NO_ERROR;
+		} else if(nameCmp == 0 && current->function->returnType == returnType) {
+			return FN_PARAM_ERROR;
+		} else if(nameCmp == 0) {
+			return FN_RETURN_ERROR;
+		}
+		current = current->next;
+	}
+	return FN_NO_ERROR;
+}
 
-	addVariable(createVariable(ST_INTEGER_TYPE,"bien"));
+typeOp getVarType(char * name) {
+	Variable * var = searchVariable(name, currentFunction);
+	if(var == NULL) {
+		return ST_VOID_TYPE;
+	}
+	return var->type;
+}
 
-	printf("%d\n", hasVariable("bien"));
-	printf("%d\n", hasVariable("pregu"));
+int amountOfFunctions() {
+	FunctionList * current = functionDeclaredList;
+	int count = 0;
+	while(current != NULL) {
+		count++;
+		current = current->next;
+	}
+	return count;
+}
 
-	createFunction("pregunta2", ST_INTEGER_TYPE, paramList);
-
-	addVariable(createVariable(ST_INTEGER_TYPE,"bien2"));
-
-	printf("%d\n", hasFunction("pregunta2"));
-	printf("%d\n", hasFunction("pregunta0"));
-	printf("%d\n", hasFunction("pregunta"));
-
-	return 0;
-}*/
+FunctionList * getAllFunctionDeclarations() {
+	return functionDeclaredList;
+}
