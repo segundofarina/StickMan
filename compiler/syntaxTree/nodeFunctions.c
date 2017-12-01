@@ -69,6 +69,7 @@ void startNodeFn(void * node) {
 	fprintf (fp,"extern direction manDirection;\n");
 	fprintf (fp,"#define left LIB_LEFT\n");
 	fprintf (fp,"#define right LIB_RIGHT\n");
+	fprintf (fp,"#define front LIB_FRONT\n");
 	fprintf (fp,"#define position manPosition\n");
 	fprintf (fp,"#define direction manDirection\n");
 	fprintf (fp,"#define eosR SCREEN_SPACES\n");
@@ -88,14 +89,14 @@ void startNodeFn(void * node) {
 void headersNodeFn(void * node) {//se puede borrar
 	headersNode * n = (headersNode *) node;
 
-	fprintf(fp,"char * compiler_libraries[50]; int i = 0; ");
+	fprintf(fp,"char * compiler_libraries[50]; int compiler_i = 0; ");
 
 	headerList * current = n->list;
 	headerNode * header;
 
 	while(current != NULL) {
 		header = current->header;
-		fprintf(fp,"compiler_libraries[i] = malloc(strlen( \"");
+		fprintf(fp,"compiler_libraries[compiler_i] = malloc(strlen( \"");
 		(header->runCode)(header);
 
 		current = current->next;
@@ -105,7 +106,7 @@ void headersNodeFn(void * node) {//se puede borrar
 void headerNodeFn(void * node) {// se puede borrar
 	headerNode * n = (headerNode *) node;
 	//agregar archivo de libreria
-	fprintf(fp,"%s+1\")); strcpy(compiler_libraries[i++],\"%s\");",n->fileName, n->fileName);
+	fprintf(fp,"%s+1\")); strcpy(compiler_libraries[compiler_i++],\"%s\");",n->fileName, n->fileName);
 }
 
 void functionsNodeFn(void * node) {

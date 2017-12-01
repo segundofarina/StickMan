@@ -1,25 +1,32 @@
 start{
     int i;
-    man->yiled "Hey! how are you?";
+
+    man->yield "Hey! how are you?";
+	man.direction = right;
     for(i=0; i<5 ; i++){
         man->walk;
     }
-    man->yiled "My name is Juan";
+
+    man->yield "My name is Juan";
     man->yield "And i like to dance";
     ballet();
     headAndShoulers();
     man->yield "now i will jump forever";
-    while(true){
+	while(true){
+		man.direction = front;
         man->jump;
     }
+
 }
 
-function ballet(){
+func ballet(){
     man->yield "this is the ballet classic";
     man->goesArroundComesArround;
 }
 
-function headAndShoulers(){
+func headAndShoulers(){
+	man.direction = right;
     man->jump + man->walk;
+	man->yield "This is how i put shampoo";
     man->headsholders;
 }
