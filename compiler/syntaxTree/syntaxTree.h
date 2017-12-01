@@ -8,10 +8,10 @@
 typedef enum {ST_INTEGER_TYPE, ST_STRING_TYPE, ST_BOOLEAN_TYPE, ST_VOID_TYPE} typeOp;
 typedef enum {ST_START_FN, ST_FUNCTION} typeFunction;
 typedef enum {ST_ASSIGNMENT, ST_DECLARATION, ST_RETURN, ST_IF, ST_WHILE, ST_FOR, ST_FUNCTION_CALL, ST_MAN_ACTION} typeSentence;
-typedef enum {ST_ASSIGNMENT_EXPRESSION, ST_ASSIGNMENT_INCREMENT, ST_ASSIGNMENT_MAN} typeAssigment;
+typedef enum {ST_ASSIGNMENT_EXPRESSION, ST_ASSIGNMENT_INCREMENT, ST_ASSIGNMENT_MAN, ST_ASSIGNMENT_STRING, ST_ASSIGNMENT_BOOLEAN} typeAssigment;
 typedef enum {ST_EQUAL, ST_ADD_EQUAL, ST_SUBSTRACT_EQUAL, ST_MULTIPLY_EQUAL, ST_DIVIDE_EQUAL} typeAssigmentOp;
 typedef enum {ST_INCREMENT_ADD, ST_INCREMENT_SUBSTRACT} typeIncrementOp;
-typedef enum {ST_DECLARATION_DEC, ST_DECLARATION_ASIGN} typeDeclaration;
+typedef enum {ST_DECLARATION_DEC, ST_DECLARATION_ASIGN, ST_DECLARATION_ASIGN_BOOLEAN, ST_DECLARATION_ASIGN_STRING} typeDeclaration;
 typedef enum {ST_RETURN_BOOLEAN, ST_RETURN_EXPRESSION} typeReturn;
 typedef enum {ST_EXP_INT, ST_EXP_VAR, ST_EXP_ADD, ST_EXP_SUBSTRACT, ST_EXP_MULTIPLY, ST_EXP_DIVIDE, ST_EXP_MODULUS, ST_EXP_MANATTR, ST_EXP_FUNCTIONCALL} typeExpression;
 typedef enum {ST_PARAM_STRING, ST_PARAM_EXP} typeParameter;
@@ -106,6 +106,8 @@ typedef struct assignmentNode {
 	manAttributeNode * manAttribute;
 	typeSentence sentenceType;
 	char * variable;
+	char * str;
+	int boolean;
 	runFn runCode;
 } assignmentNode;
 
@@ -115,6 +117,8 @@ typedef struct declarationNode {
 	expressionNode * expression;
 	typeSentence sentenceType;
 	char * variable;
+	char * str;
+	int boolean;
 	runFn runCode;
 } declarationNode;
 
@@ -298,10 +302,10 @@ conditionNode * createConditionNode(typeCondition conditionType, logicalOperator
 logicalOperatorNode * createLogicalOpNode(typeLogicOp type);
 whileNode * createWhileNode(conditionNode * condition, sentencesNode * sentences);
 returnNode * createReturnNode(typeReturn retType, int boolean, expressionNode * expression);
-declarationNode * createDeclarationNode(typeDeclaration declarationType, typeNode * type, expressionNode * expression, char * variable);
+declarationNode * createDeclarationNode(typeDeclaration declarationType, typeNode * type, expressionNode * expression, char * variable, char * str, int booelan);
 ifNode * createIfNode( conditionNode * condition, sentencesNode * sentences, elseBlockNode * elseBlock);
 elseBlockNode * createElseBlockNode(typeElseBlock typeElse, ifNode * elseif, sentencesNode * sentences);
-assignmentNode * createAssignmentNode(typeAssigment assigmentType, assignmentOpNode * assignmentOp, expressionNode * expression, incOpNode * incOp, manAttributeNode * manAttribute, char * variable);
+assignmentNode * createAssignmentNode(typeAssigment assigmentType, assignmentOpNode * assignmentOp, expressionNode * expression, incOpNode * incOp, manAttributeNode * manAttribute, char * variable, char * str, int boolean);
 manAttributeNode * createManAttributeNode(char * variable);
 assignmentOpNode * createAssignmentOpNode(typeAssigmentOp operator);
 incOpNode * createIncOpNode(typeIncrementOp operator);

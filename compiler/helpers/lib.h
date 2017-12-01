@@ -26,7 +26,9 @@ int executeAction(char * name);
 
 int executeYield(char *string);
 
-int initLibrary(char * * fileRoutes);
+int initLibrary(char * * fileRoutes, int filesAmount);
+
+int initLibraryCompiler(char * * fileRoutes, int filesAmount);
 
 int existsAction(char * name , direction dir);
 
