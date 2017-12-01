@@ -69,6 +69,7 @@ void startNodeFn(void * node) {
 	fprintf (fp,"extern direction manDirection;\n");
 	fprintf (fp,"#define left LIB_LEFT\n");
 	fprintf (fp,"#define right LIB_RIGHT\n");
+	fprintf (fp,"#define front LIB_FRONT\n");
 	fprintf (fp,"#define position manPosition\n");
 	fprintf (fp,"#define direction manDirection\n");
 	fprintf (fp,"#define eosR SCREEN_SPACES\n");
@@ -78,9 +79,9 @@ void startNodeFn(void * node) {
 
 	printAllFunction();
 
-
 	(n->headers->runCode)(n->headers);//no hace falta ejecutarlo no hace nada
 	//print all functions declarations
+
 	(n->functions->runCode)(n->functions);
 	fclose(fp);
 }
@@ -88,14 +89,14 @@ void startNodeFn(void * node) {
 void headersNodeFn(void * node) {//se puede borrar
 	headersNode * n = (headersNode *) node;
 
-	fprintf(fp,"char * compiler_libraries[50]; int i = 0; ");
+	fprintf(fp,"char * compiler_libraries[50]; int compiler_i = 0; ");
 
 	headerList * current = n->list;
 	headerNode * header;
 
 	while(current != NULL) {
 		header = current->header;
-		fprintf(fp,"compiler_libraries[i] = malloc(strlen( \"");
+		fprintf(fp,"compiler_libraries[compiler_i] = malloc(strlen( \"");
 		(header->runCode)(header);
 
 		current = current->next;
@@ -105,7 +106,7 @@ void headersNodeFn(void * node) {//se puede borrar
 void headerNodeFn(void * node) {// se puede borrar
 	headerNode * n = (headerNode *) node;
 	//agregar archivo de libreria
-	fprintf(fp,"%s+1\")); strcpy(compiler_libraries[i++],\"%s\");",n->fileName, n->fileName);
+	fprintf(fp,"%s+1\")); strcpy(compiler_libraries[compiler_i++],\"%s\");",n->fileName, n->fileName);
 }
 
 void functionsNodeFn(void * node) {
@@ -116,6 +117,7 @@ void functionsNodeFn(void * node) {
 	startFnNode * startFn;
 
 	while(current != NULL) {
+
 		if(current->functionType == ST_START_FN) {
 			startFn = (startFnNode *) current->function;
 			(startFn->runCode)(startFn);
@@ -123,6 +125,7 @@ void functionsNodeFn(void * node) {
 			function = (functionNode *) current->function;
 			(function->runCode)(function);
 		}
+
 		current = current->next;
 	}
 }
@@ -234,7 +237,7 @@ void sentenceNodeFn(void * node) {
 			(((whileNode *)(n->content))->runCode)(n->content);
 			break;
 		case ST_FUNCTION_CALL:
-			functionCall = (functionCallNode *)(n->content);printf("acaaa\n");
+			functionCall = (functionCallNode *)(n->content);
 			checkFunctionCallError(functionCall, ST_VOID_TYPE);
 			(functionCall->runCode)(functionCall);
 			fprintf(fp,"; ");
@@ -264,7 +267,7 @@ void manActionNodeFn(void * node) {
 			if (existsActionNoDir(n->var1) >=0){
 				fprintf(fp,"executeAction( \"%s\" )",n->var1);
 			}else{
-				printError("Fatal Error: %s is not a valid action");//
+				printf("Fatal Error: %s is not a valid action",n->var1);//
 			}
 
 		}
@@ -620,7 +623,7 @@ VarList * getParametersFn(fnParametersNode * parameters) {
 
 void checkFunctionCallError(functionCallNode * functionCall, typeOp type) {
 
-	switch(hasFunctionWithType(functionCall->name, type, getParametersFn(functionCall->fnParameters))) {
+	switch(hasFunctionWithType(functionCall->name, type, NULL)) {
 		case FN_NAME_ERROR:
 			printf("Fatal error: function %s is not declared.\n", functionCall->name);
 			break;
@@ -628,7 +631,7 @@ void checkFunctionCallError(functionCallNode * functionCall, typeOp type) {
 			printf("Fatal error: return type of function %s does not match it's declaration.\n", functionCall->name);
 			break;
 		case FN_PARAM_ERROR:
-			printf("Fatal error: parameters of function %s don't match it's declaration.\n", functionCall->name);
+			//printf("Fatal error: parameters of function %s don't match it's declaration.\n", functionCall->name);
 			break;
 		case FN_NO_ERROR:
 			break;

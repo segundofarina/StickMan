@@ -46,7 +46,7 @@
 "while"						{ return WHILE;}
 "if"						{ return IF;}
 "else"						{ return ELSE;}
-"true"|"false"				{ if(strcmp("true",yytext)) {
+"true"|"false"				{ if(strcmp("true",yytext) == 0) {
 									yylval.integer = 1;
 								} else {
 									yylval.integer = 0;

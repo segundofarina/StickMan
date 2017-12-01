@@ -24,7 +24,7 @@ Function * searchFunction(char * name) {
 Variable * searchVariable(char * name, Function * fn) {
 	VarList * current = fn->variables;
 	while(current != NULL) {
-		if(strcmp(current->variable->name, name) == 0) {
+		if(current->variable != NULL && strcmp(current->variable->name, name) == 0) {
 			return current->variable;
 		}
 		current = current->next;

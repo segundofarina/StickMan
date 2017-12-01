@@ -61,7 +61,7 @@ functionsNode * addToFunctionsNode(void * fn, functionsNode * pNode, typeFunctio
 	functionList * list = malloc(sizeof(functionList));
 	list->function = fn;
 	list->functionType = typeFn;
-
+	list->next = NULL;
 	functionList * current = pNode->list;
 	while(current->next != NULL) {
 		current = current->next;
